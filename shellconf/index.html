@@ -1,23 +1,23 @@
 #!/data/data/com.termux/files/usr/bin/sh
+#!/data/data/com.termux/files/usr/bin/sh
 echo "running package manager updates"
-apt update > /dev/null 2>&1
+        apt update
 echo "updating packages"
-apt full-upgrade -y
+        apt full-upgrade -y
 echo "installing prereq pkgs"
-echo "		zsh, git, tsu, root-repo"
-apt install zsh git tsu root-repo -y  > /dev/null 2>&1
-apt update > /dev/null 2>&1
+apt install zsh git tsu root-repo -y
+apt update
 echo "installing termux-api"
-apt install termux-\* -y  > /dev/null 2>&1
-apt update > /dev/null 2>&1
+apt install termux-api -y
+apt update
 echo "setting up ZSH for [oh-my-zsh/oh-my-zsh]"
-curl -sL install.ohmyz.sh | bash > /dev/null 2>&1
-chsh zsh  > /dev/null 2>&1
+curl -sL install.ohmyz.sh | bash
+chsh zsh
 echo "setting up [igaret/ohmyzsh] for custom [oh-my-zsh/oh-my-zsh]"
-#git clone https://github.com/igaret/termux_stuff $TMPDIR/termux-first-run > /dev/null 2>&1
-curl -sL https://raw.githubusercontent.com/igaret/shellconf/master/aliases > $HOME/.aliases > /dev/null 2>&1
-curl -sL https://raw.githubusercontent.com/igaret/shellconf/master/zshrc > $HOME/.zshrc > /dev/null 2>&1
-curl -sL https://raw.githubusercontent.com/igaret/shellconf/master/garet.zsh-theme > $HOME/.oh-my-zsh/themes/igaret.zsh-theme  > /dev/null 2>&1
+#git clone https://github.com/igaret/termux_stuff $TMPDIR/termux-first-run
+curl -sL https://raw.githubusercontent.com/igaret/shellconf/refs/heads/main/termux_oh-my-zsh/aliases > $HOME/.aliases
+curl -sL https://raw.githubusercontent.com/igaret/shellconf/refs/heads/main/termux_oh-my-zsh/zshrc > $HOME/.zshrc
+curl -sL https://raw.githubusercontent.com/igaret/shellconf/refs/heads/main/termux_oh-my-zsh/garet.zsh-theme > $HOME/.oh-my-zsh/themes/garet.zsh-theme
 echo "done. exiting in 3 seconds ..."
 if [ "$SHELL" == "bash" ]; then
     exec zsh
@@ -26,5 +26,3 @@ elif [ "$SHELL" == "zsh" ]; then
 else
     zsh
 fi
-sleep 3  > /dev/null 2>&1
-exit
