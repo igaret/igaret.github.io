@@ -1,18 +1,30 @@
-<!DOCTYPE HTML>
-<html lang="en-US">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=https://raw.githubusercontent.com/igaret/shellconf/8253c0a390e199527c0584fc126b99f800fce56a/termux-first-run.sh">
-  <script type="text/javascript">
-    window.location.href = "https://raw.githubusercontent.com/igaret/shellconf/8253c0a390e199527c0584fc126b99f800fce56a/termux-first-run.sh"
-  </script>
-</head>
-<body>
-<p>
-  Automatically redirecting to 
-  <a href="https://raw.githubusercontent.com/igaret/shellconf/8253c0a390e199527c0584fc126b99f800fce56a/termux-first-run.sh">
-    github.com/igaret/shellconf/termux-first-run.sh
-  </a>
-</p>
-</body>
-</html>
+#!/data/data/com.termux/files/usr/bin/sh
+echo "running package manager updates"
+apt update > /dev/null 2>&1
+echo "updating packages"
+apt full-upgrade -y
+echo "installing prereq pkgs"
+echo "		zsh, git, tsu, root-repo"
+apt install zsh git tsu root-repo -y  > /dev/null 2>&1
+apt update > /dev/null 2>&1
+echo "installing termux-api"
+apt install termux-\* -y  > /dev/null 2>&1
+apt update > /dev/null 2>&1
+echo "setting up ZSH for [oh-my-zsh/oh-my-zsh]"
+curl -sL install.ohmyz.sh | bash > /dev/null 2>&1
+chsh zsh  > /dev/null 2>&1
+echo "setting up [igaret/ohmyzsh] for custom [oh-my-zsh/oh-my-zsh]"
+#git clone https://github.com/igaret/termux_stuff $TMPDIR/termux-first-run > /dev/null 2>&1
+curl -sL https://raw.githubusercontent.com/igaret/shellconf/master/aliases > $HOME/.aliases > /dev/null 2>&1
+curl -sL https://raw.githubusercontent.com/igaret/shellconf/master/zshrc > $HOME/.zshrc > /dev/null 2>&1
+curl -sL https://raw.githubusercontent.com/igaret/shellconf/master/garet.zsh-theme > $HOME/.oh-my-zsh/themes/igaret.zsh-theme  > /dev/null 2>&1
+echo "done. exiting in 3 seconds ..."
+if [ "$SHELL" == "bash" ]; then
+    exec zsh
+elif [ "$SHELL" == "zsh" ]; then
+    omz reload
+else
+    zsh
+fi
+sleep 3  > /dev/null 2>&1
+exit
