@@ -1,20 +1,18 @@
-#!/data/data/com.termux/files/usr/bin/sh
-#!/data/data/com.termux/files/usr/bin/sh
+#!/data/data/com.termux/files/usr/bin/env sh
 echo "running package manager updates"
         apt update
 echo "updating packages"
-        apt full-upgrade -y
+        yes | apt full-upgrade -y
 echo "installing prereq pkgs"
-apt install zsh git tsu root-repo -y
+yes | apt install zsh git tsu root-repo -y
 apt update
 echo "installing termux-api"
-apt install termux-api -y
+yes | apt install termux-api -y
 apt update
 echo "setting up ZSH for [oh-my-zsh/oh-my-zsh]"
 curl -sL install.ohmyz.sh | bash
 chsh zsh
 echo "setting up [igaret/ohmyzsh] for custom [oh-my-zsh/oh-my-zsh]"
-#git clone https://github.com/igaret/termux_stuff $TMPDIR/termux-first-run
 curl -sL https://raw.githubusercontent.com/igaret/shellconf/refs/heads/main/termux_oh-my-zsh/aliases > $HOME/.aliases
 curl -sL https://raw.githubusercontent.com/igaret/shellconf/refs/heads/main/termux_oh-my-zsh/zshrc > $HOME/.zshrc
 curl -sL https://raw.githubusercontent.com/igaret/shellconf/refs/heads/main/termux_oh-my-zsh/garet.zsh-theme > $HOME/.oh-my-zsh/themes/garet.zsh-theme
