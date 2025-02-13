@@ -1,26 +1,184 @@
-#!/data/data/com.termux/files/usr/bin/env sh
-echo "running package manager updates"
-        apt update
-echo "updating packages"
-        yes | apt full-upgrade -y
-echo "installing prereq pkgs"
-yes | apt install zsh git tsu root-repo -y
-apt update
-echo "installing termux-api"
-yes | apt install termux-api -y
-apt update
-echo "setting up ZSH for [oh-my-zsh/oh-my-zsh]"
-curl -sL install.ohmyz.sh | bash
-chsh zsh
-echo "setting up [igaret/ohmyzsh] for custom [oh-my-zsh/oh-my-zsh]"
-curl -sL https://raw.githubusercontent.com/igaret/shellconf/refs/heads/main/termux_oh-my-zsh/aliases > $HOME/.aliases
-curl -sL https://raw.githubusercontent.com/igaret/shellconf/refs/heads/main/termux_oh-my-zsh/zshrc > $HOME/.zshrc
-curl -sL https://raw.githubusercontent.com/igaret/shellconf/refs/heads/main/termux_oh-my-zsh/garet.zsh-theme > $HOME/.oh-my-zsh/themes/garet.zsh-theme
-echo "done. exiting in 3 seconds ..."
-if [ "$SHELL" == "bash" ]; then
-    exec zsh
-elif [ "$SHELL" == "zsh" ]; then
-    omz reload
-else
-    zsh
-fi
+<html>
+<head>
+<style src="/css/style.css"></style>
+</head>
+        <body>
+        <div class="container">
+    <div class="triangle-pattern">
+        <h3>Assessment Distribution</h3>
+        <div class="sliders">
+            <label for="slider1">Week 1: <span id="value1">25</span>%</label>
+            <input type="range" id="slider1" min="1" max="97" value="25" oninput="adjustSliders(1)">
+
+            <label for="slider2">Week 2: <span id="value2">25</span>%</label>
+            <input type="range" id="slider2" min="1" max="97" value="25" oninput="adjustSliders(2)">
+
+            <label for="slider3">Week 3: <span id="value3">25</span>%</label>
+            <input type="range" id="slider3" min="1" max="97" value="25" oninput="adjustSliders(3)">
+
+            <label for="slider4">Week 4: <span id="value4">25</span>%</label>
+            <input type="range" id="slider4" min="1" max="97" value="25" oninput="adjustSliders(4)">
+        </div>
+    </div>
+
+    <div>
+        <h3>Assessment Parameters</h3>
+        <div class="sliders">
+            <label for="jobSlider">Number of assessments: <span id="jobValue">240</span></label>
+            <input type="range" id="jobSlider" min="1" max="500" value="240" oninput="updateJobAndStaff()">
+
+            <label for="staffSlider">Number of staff: <span id="staffValue">12</span></label>
+            <input type="range" id="staffSlider" min="1" max="40" value="12" oninput="updateJobAndStaff()">
+
+            <label for="capacitySlider">Staff assessment capacity: <span id="capacityValue">14</span></label>
+            <input type="range" id="capacitySlider" min="4" max="20" value="14" oninput="updateJobAndStaff()">
+
+            <label for="freelanceSlider">Number of freelancers: <span id="freelanceValue">0</span></label>
+            <input type="range" id="freelanceSlider" min="0" max="20" value="0" oninput="updateJobAndStaff()">
+
+            <label for="flcapSlider">Freelancer assessment capacity: <span id="flcapValue">12</span></label>
+            <input type="range" id="flcapSlider" min="4" max="20" value="12" oninput="updateJobAndStaff()">
+
+            <label for="slaSlider">SLA duration: <span id="slaValue">5</span></label>
+            <input type="range" id="slaSlider" min="1" max="8" value="5" oninput="updateJobAndStaff()">
+        </div>
+    </div>
+
+    <div>
+        <h3>Results</h3>
+        <div id="resultBreachProb" class="result">Result will appear here</div>
+        <div id="result50pct" class="result">Calculation is automatic</div>
+        <div id="result95pct" class="result">Please wait for simulation to load</div>
+        <div id="chartContainer">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+</div>
+        
+<!-- PyScript section to handle calculation and display the result -->
+        <script type="py" config='{"packages":["numpy"]}'>
+            import numpy as np
+            import pyscript
+            from js import window
+            from pyodide.ffi import create_proxy, to_js
+
+            def mc_simulation(prob_distribution, n_periods, n_staff, max_capacity, n_freelance, fl_capacity, period_mean, cv, n_samples, sla_start, sla_end):
+
+                period_length = len(prob_distribution)
+                total_duration = period_length * n_periods
+                
+                n_slots = int(n_staff * max_capacity) + int(n_freelance * fl_capacity)
+                n_columns = total_duration
+
+                # Precompute Dirichlet distributions for each period to avoid inside-loop calculations
+                week_dist = np.hstack([np.random.dirichlet(prob_distribution, n_samples) for _ in range(n_periods)])
+
+                # Precompute job counts
+                n_jobs = np.repeat(np.random.normal(loc=period_mean, scale=period_mean * cv, size=[n_samples, n_periods]), period_length, axis=1)
+
+                # Job distribution
+                job_dist = np.round(week_dist * n_jobs).astype(int)
+
+                # Generate a matrix of shape [n_samples, n_slots] with 0.9 probability of 1 and 0.1 probability of 0 to simulate the probability of an assessor being on leave
+                slot_dist = np.random.choice([0, 1], size=(n_samples, n_slots, n_columns), p=[0.1, 0.9]).sum(axis=1)
+
+                # Initialize expired bookings tracker
+                expired_jobs = np.zeros((n_samples, total_duration))
+
+                # Process bookings week by week
+                for week in range(total_duration):
+                    live_bookings = np.copy(job_dist[:, week])  # Current week bookings
+                    for offset in range(sla_end):  # 5-week window
+                        target_week = week + offset
+                        if target_week >= total_duration:  # Out of bounds
+                            expired_jobs[:, week] += live_bookings  # Add unassigned bookings to expired
+                            break
+
+                        # Allocate bookings to available slots
+                        available_slots = slot_dist[:, target_week]
+                        assigned = np.minimum(live_bookings, available_slots)
+
+                        # Update slots and live bookings
+                        slot_dist[:, target_week] -= assigned
+                        live_bookings -= assigned
+
+                        if np.all(live_bookings == 0):  # All bookings assigned
+                            break
+
+                    # Any remaining live bookings after 5 weeks are expired
+                    expired_jobs[:, week] += live_bookings
+
+                expired_jobs = expired_jobs[:, :period_length]
+
+                total_expired_jobs = expired_jobs.sum(axis=1)
+
+                return total_expired_jobs
+
+            def calculate(event=None):
+                # Retrieve the values from the sliders
+                slider1 = float(window.document.getElementById('slider1').value)
+                slider2 = float(window.document.getElementById('slider2').value)
+                slider3 = float(window.document.getElementById('slider3').value)
+                slider4 = float(window.document.getElementById('slider4').value)
+          
+                sliders = np.array([slider1/100, slider2/100, slider3/100, slider4/100])
+                prob_distribution = list(sliders)
+          
+                n_samples = 10000
+                window.n_samples_js = to_js(n_samples)
+                n_periods = 4
+                n_staff = float(window.document.getElementById('staffSlider').value)
+                n_freelance = float(window.document.getElementById('freelanceSlider').value)
+
+                # Assuming 'prob_distribution' is already defined and has a length
+                max_capacity = float(window.document.getElementById('capacitySlider').value) / len(prob_distribution)
+
+                fl_capacity = float(window.document.getElementById('flcapSlider').value) / len(prob_distribution)
+
+                period_mean = float(window.document.getElementById('jobSlider').value)
+                cv = 0.0
+                sla_start = 1
+                sla_end = int(window.document.getElementById('slaSlider').value)
+
+                # Perform the calculation using NumPy
+           
+                total_expired_jobs = mc_simulation(prob_distribution, n_periods, n_staff, max_capacity, n_freelance, fl_capacity, period_mean, cv, n_samples, sla_start, sla_end)
+          
+                hist_values, bin_edges = np.histogram([x / period_mean for x in total_expired_jobs], bins=10, range=(0,1))
+          
+                hist_values = [x / n_samples for x in hist_values]
+                bin_edges = [f"{x:.0%}" for x in bin_edges]
+          
+                window.hist_values_js = to_js(hist_values)
+                window.bin_edges_js = to_js(bin_edges)
+          
+       
+                breach_prob = np.argwhere(total_expired_jobs > 0).size / total_expired_jobs.size
+                pct_50 = int(np.percentile(total_expired_jobs, 50))
+                pct_95 = int(np.percentile(total_expired_jobs, 95))
+
+                # Display the result in the "result" div
+                window.document.getElementById('resultBreachProb').innerHTML = f"{(1-breach_prob):.0%} chance of zero breaches"
+          
+                window.document.getElementById('result50pct').innerHTML = f"50% chance of {pct_50} or more breaches"
+          
+                window.document.getElementById('result95pct').innerHTML = f"5% chance of {pct_95} or more breaches"
+          
+                # Once done, call the JavaScript function to update the chart
+                window.updateChart()
+                            
+            # Add event listeners to all sliders to trigger both the calculate and updateSliderValues functions
+            for slider_id in ['slider1', 'slider2', 'slider3', 'slider4','staffSlider','jobSlider','capacitySlider','slaSlider','freelanceSlider','flcapSlider']:
+              element = window.document.getElementById(slider_id)
+              proxy_callback = create_proxy(calculate)
+              element.addEventListener('change', proxy_callback)
+          
+      
+
+          
+            # Call calculate function when the page first loads
+            calculate()
+        </script>
+
+
+</body></html>
