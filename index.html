@@ -1,537 +1,112 @@
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    background: linear-gradient(120deg, transparent 75%, #472463 75%) 0 0, 
-                linear-gradient(240deg, transparent 75%, #472463 75%) 0 0, 
-                linear-gradient(120deg, transparent 75%, #4f2562 75%) 57.735px -100px, 
-                linear-gradient(240deg, transparent 75%, #4f2562 75%) 57.735px 100px, 
-                linear-gradient(#3a1d59 50%, #2d174d 50%);
-    background-size: 115.47px 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 5vw;
-    width: 80vw;
-    height: 80vh;
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 1rem;
-}
-
-.sliders {
-    display: flex;
-    flex-direction: column;
-    gap: 3vh;
-}
-
-.container > div {
-    flex: 1;
-    background: #fff;
-    padding: 1.5rem;
-    border-radius: 1rem;
-    height: 50vh;
-}
-
-label {
-    font-size: 1rem;
-    margin-bottom: 5px;
-}
-
-input[type="range"] {
-    width: 100%;
-}
-
-.result {
-    margin: 1.5rem 0;
-    font-size: 1rem;
-}
-
-canvas {
-    margin: 2rem 0;
-}
-</style>
-<script>// Helper function to update innerText of an element
-function updateElementValue(elementId, value) {
-    document.getElementById(elementId).innerText = value;
-}
-
-function adjustSliders(changedSlider) {
-    const sliders = [
-        document.getElementById('slider1'),
-        document.getElementById('slider2'),
-        document.getElementById('slider3'),
-        document.getElementById('slider4')
-    ];
-
-    let total = sliders.reduce((sum, slider) => sum + parseInt(slider.value), 0);
-
-    if (total === 100) return; // No need to adjust if the total is already 100
-
-    const delta = total - 100; // How much we need to adjust the other sliders
-    const remainingSliders = sliders.filter((_, index) => index !== changedSlider - 1);
-
-    remainingSliders.forEach(slider => {
-        const adjustment = Math.round((slider.value / (total - sliders[changedSlider - 1].value)) * delta);
-        slider.value = Math.max(0, Math.min(100, parseInt(slider.value) - adjustment)); // Adjust and keep values in bounds
-    });
-
-    // Final check to ensure the total is exactly 100
-    total = sliders.reduce((sum, slider) => sum + parseInt(slider.value), 0);
-    if (total !== 100) {
-        sliders[changedSlider - 1].value = parseInt(sliders[changedSlider - 1].value) - (total - 100); // Final adjustment
-    }
-
-    updateSliderValues(); // Update the display of slider values
-}
-
-function updateSliderValues() {
-    updateElementValue('value1', document.getElementById('slider1').value);
-    updateElementValue('value2', document.getElementById('slider2').value);
-    updateElementValue('value3', document.getElementById('slider3').value);
-    updateElementValue('value4', document.getElementById('slider4').value);
-}
-
-// Initial call to set the displayed values when the page loads
-updateSliderValues();
-
-// New function for updating Jobs and Staff sliders
-function updateJobAndStaff() {
-    updateElementValue('jobValue', document.getElementById('jobSlider').value);
-    updateElementValue('staffValue', document.getElementById('staffSlider').value);
-    updateElementValue('capacityValue', document.getElementById('capacitySlider').value);
-    updateElementValue('slaValue', document.getElementById('slaSlider').value);
-    updateElementValue('freelanceValue', document.getElementById('freelanceSlider').value);
-    updateElementValue('flcapValue', document.getElementById('flcapSlider').value);
-}
-
-function updateChart() {
-  
-     const chartContainer = document.getElementById('myChart'); // Assuming your chart is inside a div with this ID
-
-    if (window.hist_values_js.length === 0 || window.bin_edges_js.length === 0) {
-        // If histogram data is empty, hide the chart
-        myChart.data.datasets[0].data = [window.n_samples_js];
-        myChart.data.labels = [0];
-    } else {
-        // If histogram data is present, show the chart
-        myChart.data.datasets[0].data = window.hist_values_js;
-        myChart.data.labels = window.bin_edges_js;  
-      }
-    myChart.update();
-}
-
-document.addEventListener("pyscript:ready", updateChart);
-
-const ctx = document.getElementById('myChart').getContext('2d');
-const myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: [0], // Example labels
-        datasets: [{
-            label: 'Simulations',
-            data: [], // Example data
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        plugins: {
-            legend: {
-                display: false
-            }
-        },
-        scales: {
-            y: { 
-              beginAtZero: true,
-              grid: {display: false},
-              max: 1,
-              ticks: {
-                precision: 0,
-                format: {style: 'percent'}
-              },
-              title: {
-                display: true,
-                text: '% of simulations'
-              }
-            },
-            x: {
-              beginAtZero: true,
-              grid: {display: false},
-              max: 10,
-              ticks: {
-                maxTicksLimit: 6
-              },
-              title: {
-                display: true,
-                text: '% breaches'
-              }
-            },
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technitium DNS Server Setup Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background-color: #f5f5f5;
+            color: #333;
         }
-    }
-});
-</script>
-<div class="container">
-    <div class="triangle-pattern">
-        <h3>Assessment Distribution</h3>
-        <div class="sliders">
-            <label for="slider1">Week 1: <span id="value1">25</span>%</label>
-            <input type="range" id="slider1" min="1" max="97" value="25" oninput="adjustSliders(1)">
-
-            <label for="slider2">Week 2: <span id="value2">25</span>%</label>
-            <input type="range" id="slider2" min="1" max="97" value="25" oninput="adjustSliders(2)">
-
-            <label for="slider3">Week 3: <span id="value3">25</span>%</label>
-            <input type="range" id="slider3" min="1" max="97" value="25" oninput="adjustSliders(3)">
-
-            <label for="slider4">Week 4: <span id="value4">25</span>%</label>
-            <input type="range" id="slider4" min="1" max="97" value="25" oninput="adjustSliders(4)">
-        </div>
+        h1, h2 {
+            color: #2c3e50;
+        }
+        pre {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .step {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .note {
+            background-color: #fffde7;
+            padding: 10px;
+            border-left: 4px solid #ffd600;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Technitium DNS Server Setup Guide</h1>
+    
+    <div class="note">
+        <strong>Note:</strong> You must have root access to complete this installation.
     </div>
-
-    <div>
-        <h3>Assessment Parameters</h3>
-        <div class="sliders">
-            <label for="jobSlider">Number of assessments: <span id="jobValue">240</span></label>
-            <input type="range" id="jobSlider" min="1" max="500" value="240" oninput="updateJobAndStaff()">
-
-            <label for="staffSlider">Number of staff: <span id="staffValue">12</span></label>
-            <input type="range" id="staffSlider" min="1" max="40" value="12" oninput="updateJobAndStaff()">
-
-            <label for="capacitySlider">Staff assessment capacity: <span id="capacityValue">14</span></label>
-            <input type="range" id="capacitySlider" min="4" max="20" value="14" oninput="updateJobAndStaff()">
-
-            <label for="freelanceSlider">Number of freelancers: <span id="freelanceValue">0</span></label>
-            <input type="range" id="freelanceSlider" min="0" max="20" value="0" oninput="updateJobAndStaff()">
-
-            <label for="flcapSlider">Freelancer assessment capacity: <span id="flcapValue">12</span></label>
-            <input type="range" id="flcapSlider" min="4" max="20" value="12" oninput="updateJobAndStaff()">
-
-            <label for="slaSlider">SLA duration: <span id="slaValue">5</span></label>
-            <input type="range" id="slaSlider" min="1" max="8" value="5" oninput="updateJobAndStaff()">
-        </div>
+    
+    <div class="step">
+        <h2>Step 1: Install Required Packages</h2>
+        <p>First, install all the necessary dependencies by running the following command:</p>
+        <pre><code>yes | apt install dotnet-runtime-8.0 dotnet-host dotnet-apphost dotnet-apphost-pack-8.0 dotnet-sdk-8.0 wget tsu -y</code></pre>
     </div>
-
-    <div>
-        <h3>Results</h3>
-        <div id="resultBreachProb" class="result">Result will appear here</div>
-        <div id="result50pct" class="result">Calculation is automatic</div>
-        <div id="result95pct" class="result">Please wait for simulation to load</div>
-        <div id="chartContainer">
-            <canvas id="myChart"></canvas>
-        </div>
+    
+    <div class="step">
+        <h2>Step 2: Download Technitium DNS Server</h2>
+        <p>Download the Technitium DNS Server portable package:</p>
+        <pre><code>wget https://download.technitium.com/dns/DnsServerPortable.tar.gz -o dns.tar.gz</code></pre>
     </div>
-</div>
-        
-<!-- PyScript section to handle calculation and display the result -->
-        <script type="py" config='{"packages":["numpy"]}'>
-            import numpy as np
-            import pyscript
-            from js import window
-            from pyodide.ffi import create_proxy, to_js
-
-            def mc_simulation(prob_distribution, n_periods, n_staff, max_capacity, n_freelance, fl_capacity, period_mean, cv, n_samples, sla_start, sla_end):
-
-                period_length = len(prob_distribution)
-                total_duration = period_length * n_periods
-                
-                n_slots = int(n_staff * max_capacity) + int(n_freelance * fl_capacity)
-                n_columns = total_duration
-
-                # Precompute Dirichlet distributions for each period to avoid inside-loop calculations
-                week_dist = np.hstack([np.random.dirichlet(prob_distribution, n_samples) for _ in range(n_periods)])
-
-                # Precompute job counts
-                n_jobs = np.repeat(np.random.normal(loc=period_mean, scale=period_mean * cv, size=[n_samples, n_periods]), period_length, axis=1)
-
-                # Job distribution
-                job_dist = np.round(week_dist * n_jobs).astype(int)
-
-                # Generate a matrix of shape [n_samples, n_slots] with 0.9 probability of 1 and 0.1 probability of 0 to simulate the probability of an assessor being on leave
-                slot_dist = np.random.choice([0, 1], size=(n_samples, n_slots, n_columns), p=[0.1, 0.9]).sum(axis=1)
-
-                # Initialize expired bookings tracker
-                expired_jobs = np.zeros((n_samples, total_duration))
-
-                # Process bookings week by week
-                for week in range(total_duration):
-                    live_bookings = np.copy(job_dist[:, week])  # Current week bookings
-                    for offset in range(sla_end):  # 5-week window
-                        target_week = week + offset
-                        if target_week >= total_duration:  # Out of bounds
-                            expired_jobs[:, week] += live_bookings  # Add unassigned bookings to expired
-                            break
-
-                        # Allocate bookings to available slots
-                        available_slots = slot_dist[:, target_week]
-                        assigned = np.minimum(live_bookings, available_slots)
-
-                        # Update slots and live bookings
-                        slot_dist[:, target_week] -= assigned
-                        live_bookings -= assigned
-
-                        if np.all(live_bookings == 0):  # All bookings assigned
-                            break
-
-                    # Any remaining live bookings after 5 weeks are expired
-                    expired_jobs[:, week] += live_bookings
-
-                expired_jobs = expired_jobs[:, :period_length]
-
-                total_expired_jobs = expired_jobs.sum(axis=1)
-
-                return total_expired_jobs
-
-            def calculate(event=None):
-                # Retrieve the values from the sliders
-                slider1 = float(window.document.getElementById('slider1').value)
-                slider2 = float(window.document.getElementById('slider2').value)
-                slider3 = float(window.document.getElementById('slider3').value)
-                slider4 = float(window.document.getElementById('slider4').value)
-          
-                sliders = np.array([slider1/100, slider2/100, slider3/100, slider4/100])
-                prob_distribution = list(sliders)
-          
-                n_samples = 10000
-                window.n_samples_js = to_js(n_samples)
-                n_periods = 4
-                n_staff = float(window.document.getElementById('staffSlider').value)
-                n_freelance = float(window.document.getElementById('freelanceSlider').value)
-
-                # Assuming 'prob_distribution' is already defined and has a length
-                max_capacity = float(window.document.getElementById('capacitySlider').value) / len(prob_distribution)
-
-                fl_capacity = float(window.document.getElementById('flcapSlider').value) / len(prob_distribution)
-
-                period_mean = float(window.document.getElementById('jobSlider').value)
-                cv = 0.0
-                sla_start = 1
-                sla_end = int(window.document.getElementById('slaSlider').value)
-
-                # Perform the calculation using NumPy
-           
-                total_expired_jobs = mc_simulation(prob_distribution, n_periods, n_staff, max_capacity, n_freelance, fl_capacity, period_mean, cv, n_samples, sla_start, sla_end)
-          
-                hist_values, bin_edges = np.histogram([x / period_mean for x in total_expired_jobs], bins=10, range=(0,1))
-          
-                hist_values = [x / n_samples for x in hist_values]
-                bin_edges = [f"{x:.0%}" for x in bin_edges]
-          
-                window.hist_values_js = to_js(hist_values)
-                window.bin_edges_js = to_js(bin_edges)
-          
-       
-                breach_prob = np.argwhere(total_expired_jobs > 0).size / total_expired_jobs.size
-                pct_50 = int(np.percentile(total_expired_jobs, 50))
-                pct_95 = int(np.percentile(total_expired_jobs, 95))
-
-                # Display the result in the "result" div
-                window.document.getElementById('resultBreachProb').innerHTML = f"{(1-breach_prob):.0%} chance of zero breaches"
-          
-                window.document.getElementById('result50pct').innerHTML = f"50% chance of {pct_50} or more breaches"
-          
-                window.document.getElementById('result95pct').innerHTML = f"5% chance of {pct_95} or more breaches"
-          
-                # Once done, call the JavaScript function to update the chart
-                window.updateChart()
-                            
-            # Add event listeners to all sliders to trigger both the calculate and updateSliderValues functions
-            for slider_id in ['slider1', 'slider2', 'slider3', 'slider4','staffSlider','jobSlider','capacitySlider','slaSlider','freelanceSlider','flcapSlider']:
-              element = window.document.getElementById(slider_id)
-              proxy_callback = create_proxy(calculate)
-              element.addEventListener('change', proxy_callback)
-          
-      
-
-          
-            # Call calculate function when the page first loads
-            calculate()
-        </script>
-
-
-<div class="container">
-    <div class="triangle-pattern">
-        <h3>Assessment Distribution</h3>
-        <div class="sliders">
-            <label for="slider1">Week 1: <span id="value1">25</span>%</label>
-            <input type="range" id="slider1" min="1" max="97" value="25" oninput="adjustSliders(1)">
-
-            <label for="slider2">Week 2: <span id="value2">25</span>%</label>
-            <input type="range" id="slider2" min="1" max="97" value="25" oninput="adjustSliders(2)">
-
-            <label for="slider3">Week 3: <span id="value3">25</span>%</label>
-            <input type="range" id="slider3" min="1" max="97" value="25" oninput="adjustSliders(3)">
-
-            <label for="slider4">Week 4: <span id="value4">25</span>%</label>
-            <input type="range" id="slider4" min="1" max="97" value="25" oninput="adjustSliders(4)">
-        </div>
+    
+    <div class="step">
+        <h2>Step 3: Prepare Installation Directory</h2>
+        <p>Create a directory for DNS server and move the downloaded file:</p>
+        <pre><code>mkdir dns
+mv dns.tar.gz dns/
+cd dns</code></pre>
     </div>
-
-    <div>
-        <h3>Assessment Parameters</h3>
-        <div class="sliders">
-            <label for="jobSlider">Number of assessments: <span id="jobValue">240</span></label>
-            <input type="range" id="jobSlider" min="1" max="500" value="240" oninput="updateJobAndStaff()">
-
-            <label for="staffSlider">Number of staff: <span id="staffValue">12</span></label>
-            <input type="range" id="staffSlider" min="1" max="40" value="12" oninput="updateJobAndStaff()">
-
-            <label for="capacitySlider">Staff assessment capacity: <span id="capacityValue">14</span></label>
-            <input type="range" id="capacitySlider" min="4" max="20" value="14" oninput="updateJobAndStaff()">
-
-            <label for="freelanceSlider">Number of freelancers: <span id="freelanceValue">0</span></label>
-            <input type="range" id="freelanceSlider" min="0" max="20" value="0" oninput="updateJobAndStaff()">
-
-            <label for="flcapSlider">Freelancer assessment capacity: <span id="flcapValue">12</span></label>
-            <input type="range" id="flcapSlider" min="4" max="20" value="12" oninput="updateJobAndStaff()">
-
-            <label for="slaSlider">SLA duration: <span id="slaValue">5</span></label>
-            <input type="range" id="slaSlider" min="1" max="8" value="5" oninput="updateJobAndStaff()">
-        </div>
+    
+    <div class="step">
+        <h2>Step 4: Extract the Package</h2>
+        <p>Uncompress the downloaded package:</p>
+        <pre><code>gunzip --uncompress dns.tar.gz</code></pre>
     </div>
-
-    <div>
-        <h3>Results</h3>
-        <div id="resultBreachProb" class="result">Result will appear here</div>
-        <div id="result50pct" class="result">Calculation is automatic</div>
-        <div id="result95pct" class="result">Please wait for simulation to load</div>
-        <div id="chartContainer">
-            <canvas id="myChart"></canvas>
-        </div>
+    
+    <div class="step">
+        <h2>Step 5: Set Up System Directory</h2>
+        <p>Create the system directory for Technitium and copy the files:</p>
+        <pre><code>sudo mkdir $PREFIX/opt/technitium
+sudo cp -r dns $PREFIX/opt/technitium/</code></pre>
     </div>
-</div>
-        
-<!-- PyScript section to handle calculation and display the result -->
-        <script type="py" config='{"packages":["numpy"]}'>
-            import numpy as np
-            import pyscript
-            from js import window
-            from pyodide.ffi import create_proxy, to_js
-
-            def mc_simulation(prob_distribution, n_periods, n_staff, max_capacity, n_freelance, fl_capacity, period_mean, cv, n_samples, sla_start, sla_end):
-
-                period_length = len(prob_distribution)
-                total_duration = period_length * n_periods
-                
-                n_slots = int(n_staff * max_capacity) + int(n_freelance * fl_capacity)
-                n_columns = total_duration
-
-                # Precompute Dirichlet distributions for each period to avoid inside-loop calculations
-                week_dist = np.hstack([np.random.dirichlet(prob_distribution, n_samples) for _ in range(n_periods)])
-
-                # Precompute job counts
-                n_jobs = np.repeat(np.random.normal(loc=period_mean, scale=period_mean * cv, size=[n_samples, n_periods]), period_length, axis=1)
-
-                # Job distribution
-                job_dist = np.round(week_dist * n_jobs).astype(int)
-
-                # Generate a matrix of shape [n_samples, n_slots] with 0.9 probability of 1 and 0.1 probability of 0 to simulate the probability of an assessor being on leave
-                slot_dist = np.random.choice([0, 1], size=(n_samples, n_slots, n_columns), p=[0.1, 0.9]).sum(axis=1)
-
-                # Initialize expired bookings tracker
-                expired_jobs = np.zeros((n_samples, total_duration))
-
-                # Process bookings week by week
-                for week in range(total_duration):
-                    live_bookings = np.copy(job_dist[:, week])  # Current week bookings
-                    for offset in range(sla_end):  # 5-week window
-                        target_week = week + offset
-                        if target_week >= total_duration:  # Out of bounds
-                            expired_jobs[:, week] += live_bookings  # Add unassigned bookings to expired
-                            break
-
-                        # Allocate bookings to available slots
-                        available_slots = slot_dist[:, target_week]
-                        assigned = np.minimum(live_bookings, available_slots)
-
-                        # Update slots and live bookings
-                        slot_dist[:, target_week] -= assigned
-                        live_bookings -= assigned
-
-                        if np.all(live_bookings == 0):  # All bookings assigned
-                            break
-
-                    # Any remaining live bookings after 5 weeks are expired
-                    expired_jobs[:, week] += live_bookings
-
-                expired_jobs = expired_jobs[:, :period_length]
-
-                total_expired_jobs = expired_jobs.sum(axis=1)
-
-                return total_expired_jobs
-
-            def calculate(event=None):
-                # Retrieve the values from the sliders
-                slider1 = float(window.document.getElementById('slider1').value)
-                slider2 = float(window.document.getElementById('slider2').value)
-                slider3 = float(window.document.getElementById('slider3').value)
-                slider4 = float(window.document.getElementById('slider4').value)
-          
-                sliders = np.array([slider1/100, slider2/100, slider3/100, slider4/100])
-                prob_distribution = list(sliders)
-          
-                n_samples = 10000
-                window.n_samples_js = to_js(n_samples)
-                n_periods = 4
-                n_staff = float(window.document.getElementById('staffSlider').value)
-                n_freelance = float(window.document.getElementById('freelanceSlider').value)
-
-                # Assuming 'prob_distribution' is already defined and has a length
-                max_capacity = float(window.document.getElementById('capacitySlider').value) / len(prob_distribution)
-
-                fl_capacity = float(window.document.getElementById('flcapSlider').value) / len(prob_distribution)
-
-                period_mean = float(window.document.getElementById('jobSlider').value)
-                cv = 0.0
-                sla_start = 1
-                sla_end = int(window.document.getElementById('slaSlider').value)
-
-                # Perform the calculation using NumPy
-           
-                total_expired_jobs = mc_simulation(prob_distribution, n_periods, n_staff, max_capacity, n_freelance, fl_capacity, period_mean, cv, n_samples, sla_start, sla_end)
-          
-                hist_values, bin_edges = np.histogram([x / period_mean for x in total_expired_jobs], bins=10, range=(0,1))
-          
-                hist_values = [x / n_samples for x in hist_values]
-                bin_edges = [f"{x:.0%}" for x in bin_edges]
-          
-                window.hist_values_js = to_js(hist_values)
-                window.bin_edges_js = to_js(bin_edges)
-          
-       
-                breach_prob = np.argwhere(total_expired_jobs > 0).size / total_expired_jobs.size
-                pct_50 = int(np.percentile(total_expired_jobs, 50))
-                pct_95 = int(np.percentile(total_expired_jobs, 95))
-
-                # Display the result in the "result" div
-                window.document.getElementById('resultBreachProb').innerHTML = f"{(1-breach_prob):.0%} chance of zero breaches"
-          
-                window.document.getElementById('result50pct').innerHTML = f"50% chance of {pct_50} or more breaches"
-          
-                window.document.getElementById('result95pct').innerHTML = f"5% chance of {pct_95} or more breaches"
-          
-                # Once done, call the JavaScript function to update the chart
-                window.updateChart()
-                            
-            # Add event listeners to all sliders to trigger both the calculate and updateSliderValues functions
-            for slider_id in ['slider1', 'slider2', 'slider3', 'slider4','staffSlider','jobSlider','capacitySlider','slaSlider','freelanceSlider','flcapSlider']:
-              element = window.document.getElementById(slider_id)
-              proxy_callback = create_proxy(calculate)
-              element.addEventListener('change', proxy_callback)
-          
-      
-
-          
-            # Call calculate function when the page first loads
-            calculate()
-        </script>
-
+    
+    <div class="step">
+        <h2>Step 6: Create Service Link</h2>
+        <p>Create a symbolic link for the service:</p>
+        <pre><code>sudo ln -sf /data/data/com.termux/files/usr/opt/technitium/dns/start.sh /data/data/com.termux/files/usr/bin/svc-technitium-start</code></pre>
+    </div>
+    
+    <div class="step">
+        <h2>Step 7: Create Startup Script</h2>
+        <p>Create the startup script for the DNS service:</p>
+        <pre><code>cat > /data/data/com.termux/files/usr/opt/technitium/dns/start.sh <<EOF
+#!/bin/sh
+/data/data/com.termux/files/usr/bin/dotnet /data/data/com.termux/files/usr/opt/technitium/dns/DnsServerApp.dll
+EOF</code></pre>
+    </div>
+    
+    <div class="step">
+        <h2>Step 8: Running the DNS Server</h2>
+        <p>To start the Technitium DNS Server, run:</p>
+        <pre><code>sudo svc-technitium-start</code></pre>
+    </div>
+    
+    <div class="note">
+        <strong>Tip:</strong> After installation, you can access the web-based administration panel at <code>http://localhost:5380</code> if running locally.
+    </div>
+</body>
+</html>
