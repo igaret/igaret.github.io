@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technitium DNS Server Setup Guide</title>
+    <title><a href="https://github.com/termux" target="_new">TERMUX</a> <a href="" target="_new">Technitium DNS Server</a> Setup Guide</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -93,10 +93,11 @@ sudo cp -r dns $PREFIX/opt/technitium/</code></pre>
     <div class="step">
         <h2>Step 7: Create Startup Script</h2>
         <p>Create the startup script for the DNS service:</p>
-        <pre><code>cat > /data/data/com.termux/files/usr/opt/technitium/dns/start.sh <<EOF
-#!/bin/sh
-/data/data/com.termux/files/usr/bin/dotnet /data/data/com.termux/files/usr/opt/technitium/dns/DnsServerApp.dll
-EOF</code></pre>
+        <pre>
+            <code>
+echo \#\!/bin/sh > /data/data/com.termux/files/usr/opt/technitium/dns/start.sh
+echo /data/data/com.termux/files/usr/bin/dotnet /data/data/com.termux/files/usr/opt/technitium/dns/DnsServerApp.dll >> /data/data/com.termux/files/usr/opt/technitium/dns/start.sh
+</code></pre>
     </div>
     
     <div class="step">
