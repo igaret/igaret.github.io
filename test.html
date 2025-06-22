@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>igaret - Redesigned like Technitium</title>
+    <!-- Import Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet" />
+    <style>
+        /* Reset and base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        a {
+            color: #1e88e5;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover, a:focus {
+            color: #42a5f5;
+            outline: none;
+        }
+
+        /* Navbar */
+        header {
+            background-color: #1f1f1f;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.7);
+        }
+        nav {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #1e88e5;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        .nav-links li a {
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 0.3rem 0.5rem;
+        }
+        .nav-links li a:hover {
+            border-bottom: 2px solid #42a5f5;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1565c0 0%, #1e88e5 100%);
+            color: #fff;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .btn-primary {
+            background-color: #42a5f5;
+            border: none;
+            padding: 0.75rem 1.75rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #1976d2;
+            outline: none;
+        }
+
+        /* Main Content Area */
+        main {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Section common styles */
+        section {
+            margin-bottom: 4rem;
+        }
+        section h2 {
+            font-size: 2rem;
+            color: #1e88e5;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #42a5f5;
+            padding-bottom: 0.3rem;
+            display: inline-block;
+        }
+        section p {
+            max-width: 700px;
+            color: #bdbdbd;
+        }
+
+        /* Cards */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .card {
+            background-color: #212121;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+            transition: transform 0.2s ease;
+        }
+        .card:hover,
+        .card:focus-within {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.8);
+            outline: none;
+        }
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            color: #90caf9;
+            font-weight: 700;
+        }
+        .card p {
+            color: #cccccc;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1f1f1f;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Responsive adjustments */
+        @media(max-width: 600px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            header nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo" tabindex="0">igaret</div>
+            <ul class="nav-links">
+                <li><a href="#about" tabindex="0">About</a></li>
+                <li><a href="#features" tabindex="0">Features</a></li>
+                <li><a href="#download" tabindex="0">Download</a></li>
+                <li><a href="#contact" tabindex="0">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="hero" role="banner">
+        <h1>Welcome to igaret</h1>
+        <p>Your solution for efficient cigarette tracking and management with sleek design and powerful features.</p>
+        <a href="#download" class="btn-primary" tabindex="0">Download Now</a>
+    </section>
+    <main>
+        <section id="about" tabindex="0" aria-labelledby="about-heading">
+            <h2 id="about-heading">About igaret</h2>
+            <p>
+                igaret is an innovative platform designed to help you monitor, analyze, and optimize your cigarette usage habits. Focused on user-friendly experience and insightful statistics, it supports your goals in managing your lifestyle better.
+            </p>
+        </section>
+
+        <section id="features" tabindex="0" aria-labelledby="features-heading">
+            <h2 id="features-heading">Features</h2>
+            <div class="card-container">
+                <article class="card" tabindex="0" aria-label="Real-time tracking feature">
+                    <h3>Real-time Tracking</h3>
+                    <p>Monitor your cigarette consumption with instant updates and daily summaries.</p>
+                </article>
+                <article class="card" tabindex="0" aria-label="Insightful reports feature">
+                    <h3>Insightful Reports</h3>
+                    <p>Analyze your patterns with easy-to-understand graphs and suggestions.</p>
+                </article>
+                <article class="card" tabindex="0" aria-label="Custom reminders feature">
+                    <h3>Custom Reminders</h3>
+                    <p>Set personalized alerts to help you stick to your targets and schedules.</p>
+                </article>
+                <article class="card" tabindex="0" aria-label="Secure and private feature">
+                    <h3>Secure and Private</h3>
+                    <p>Your data is encrypted and stored responsibly to ensure your privacy.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="download" tabindex="0" aria-labelledby="download-heading">
+            <h2 id="download-heading">Get igaret Today</h2>
+            <p>Ready to take control? Download igaret for your preferred platform now:</p>
+            <ul>
+                <li><a href="#" tabindex="0">Windows</a></li>
+                <li><a href="#" tabindex="0">MacOS</a></li>
+                <li><a href="#" tabindex="0">Linux</a></li>
+                <li><a href="#" tabindex="0">Mobile App</a></li>
+            </ul>
+        </section>
+
+        <section id="contact" tabindex="0" aria-labelledby="contact-heading">
+            <h2 id="contact-heading">Contact Us</h2>
+            <p>Questions or feedback? Reach out to us via email or social media.</p>
+            <ul>
+                <li>Email: <a href="mailto:support@igaret.com" tabindex="0">support@igaret.com</a></li>
+                <li>Twitter: <a href="https://twitter.com/igaret" target="_blank" rel="noopener" tabindex="0">@igaret</a></li>
+                <li>GitHub: <a href="https://github.com/igaret" target="_blank" rel="noopener" tabindex="0">github.com/igaret</a></li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        &copy; 2024 igaret. All rights reserved.
+    </footer>
+</body>
+</html>
