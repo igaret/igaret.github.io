@@ -1,5 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
-yes | apt install dotnet-runtime-8.0 dotnet-host dotnet-apphost dotnet-apphost-pack-8.0 dotnet-sdk-8.0 wget tsu -y
+yes | apt install dotnet-runtime-8.0 dotnet-host dotnet-apphost-pack-8.0 dotnet-sdk-8.0 wget tsu
+sleep 1
 wget https://download.technitium.com/dns/DnsServerPortable.tar.gz -o dns.tar.gz
 mkdir dns
 mv dns.tar.gz dns/
