@@ -1,0 +1,825 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+
+<!--  
+****************************************************************
+hotspotlogin_header1.inc.html
+**************************************************************** 
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>LOGIN TO HOTSPOT >>></title>
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<link type="text/css" rel="stylesheet" href=="https://customer.hotspotsystem.com/customer/templates/2009_basic/style.css">
+
+<!--[if lt IE 7]>
+<script type="text/javascript" src=="https://customer.hotspotsystem.com/modules/transparent.js"></script> 
+<![endif]-->
+
+
+<script type="text/javascript" src=="https://customer.hotspotsystem.com/customer/templates/default/jquery-1.5.1.js"></script>
+
+  <script type="text/javascript"> $(document).ready(function() { // hides the slickbox as soon as the DOM is ready  $('#slickbox').hide(); // shows the slickbox on clicking the noted link  $('#slick-show').click(function() { $('#slickbox').slideDown('fast'); 	 return false;  }); // hides the slickbox on clicking the noted link  $('#slick-hide').click(function() { $('#slickbox').hide('fast'); return false;  }); // toggles the slickbox on clicking the noted link  $('#slick-toggle').click(  	function()   	{ 		$('#slickbox').slideDown(150).delay(0); 	$('#slick-toggle').hide();	 		return false;  	}  );      	 $('#slick-toggle2').click(function(){		 	  	$('#slick-toggle').show();	      $('#slickbox').slideUp(150).delay(0);	 	});			 	}); </script> 
+ 
+ 
+ <script type="text/javascript"> 
+
+function toggle_acc()
+{
+	if (document.getElementById('slickbox').style.display=='none')
+	{
+	
+	document.getElementById('slickbox').style.display='block';
+	
+	
+	document.getElementById('rarrow').src='images_main/arrow_up_black.png';
+	
+	document.getElementById('int').style.color='#567c19';
+	
+	
+	return;
+	
+	}
+	
+	if (document.getElementById('slickbox').style.display=='block')
+	{
+	
+	document.getElementById('slickbox').style.display='none';
+
+		document.getElementById('rarrow').src='images_main/arrow_down.png';
+		
+		
+			document.getElementById('int').style.color='#fff';
+	
+	return;
+	
+	}
+	
+}
+
+</script>
+ 
+
+</head>
+
+<!--  
+****************************************************************
+hotspotlogin_header2.inc.html
+**************************************************************** 
+-->
+
+<body style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px;" onLoad="">
+
+
+<script type="text/javascript">
+var LangName =  new Array();
+var LangID =  new Array();
+var LangShortname =  new Array();
+</script>
+<style>#slick-toggle{display:none;}</style>
+
+<script type="text/javascript">function w1() {for (var i = 0; i < LangName.length ; i++ ){ document.write('<div id="thinline" ></div><li id="' + LangID[i] +'"><a href=="https://customer.hotspotsystem.com/customer/prelogin.php?lang=' + LangShortname[i] +'&operator=izryel&location_id=5&uamip=&uamport=" style="text-decoration:none;"><img src="customer_images/flag_' + LangShortname[i] +'.gif" style="margin-left:4px;margin-right:4px;margin-top:6px;margin-bottom:-1px;display:inline;" >' + LangName[i] +'</a></li>' ); }}</script>         
+
+<!-- header table-->
+<center>
+
+
+
+<table id="Table_02" width="100%" height=30 border="0" cellpadding="0" cellspacing="0">
+
+         	<tr valign="top">
+		<td height="90" width=100%  style="background-color:#ffffff;" valign="top">   
+        
+         <center>  
+         
+         
+       <div  id="slick-toggle"  style="cursor:hand;cursor:pointer; vertical-align:middle;"> <img id="rarrow" src=="https://customer.hotspotsystem.com/images_main/arrow_up.png" style="margin-top:-2px;vertical-align:middle;"  /><span  style="vertical-align:middle;"> International </span>                  <img src="customer_images/flag_en.gif" style="vertical-align:middle;margin-top:0px;display:inline;" ></div>         <div  id="slickbox" style="display:none;padding-top:0px;padding-bottom:0px;  "  >				                <div  id="slick-toggle2" style="cursor:hand;cursor:pointer;vertical-align:middle;" > <img id="rarrow" src=="https://customer.hotspotsystem.com/images_main/arrow_down.png"   style="margin-top:-2px;vertical-align:middle;"  /><span  style="vertical-align:middle;"> International </span> <img src="customer_images/flag_en.gif" style="vertical-align:middle;margin-top:0px;display:inline;" ></div>                                					<div class="menu3"  >        				<ul style="padding:0px;margin:0px;" >                                                	<script type="text/javascript">w1();</script>          			 	</ul>                                							</div>                               		</div>                              
+
+         
+     <img src=customer_images/customer-logo_gray.png style="margin-top:5px;margin-bottom:5px;" />
+           
+
+	
+
+          </td></tr>
+
+        
+        	</table>
+       
+       
+       
+        <!-- header table end -->
+
+
+	
+ <!-- middle box -->
+
+   
+        
+        <div class="szt2" id="textbase" align="center" style="width:700px;">   
+ 
+
+<!--  
+****************************************************************
+main_combined_autologin.inc.html
+**************************************************************** 
+-->
+
+<script src=="https://customer.hotspotsystem.com/controlcenter/jquery.qtip.js"></script>
+
+
+
+<script type="text/javascript"><!--
+
+// Custom settings
+
+var minlength = '3';  // Set to minimum required characters as specified in your form
+
+var delay = '0';  // Time of inactivity to check. Always in milliseconds! (1 sec = 1000 millisec.)
+
+var ok_image = "<img src='customer_images/check.jpg' style='vertical-align:middle;margin-top:-3px;'/>";
+var no_image = "<img src='customer_images/cross.jpg' style='vertical-align:middle;margin-top:-3px;' />";
+
+
+// Declaring required variables
+var digits = "0123456789";
+// non-digit characters which are allowed in phone numbers
+var phoneNumberDelimiters = "()- ";
+// characters which are allowed in international phone numbers
+// (a leading + is OK)
+var validWorldPhoneChars = phoneNumberDelimiters + "+";
+// Minimum no of digits in an international phone no.
+var minDigitsInIPhoneNumber = 10;
+
+var icc = [];
+
+icc['AF'] = '93';
+icc['AL'] = '355';
+icc['DZ'] = '213';
+icc['AS'] = '1684';
+icc['AD'] = '376';
+icc['AO'] = '244';
+icc['AI'] = '1264';
+icc['AG'] = '1268';
+icc['AR'] = '54';
+icc['AM'] = '374';
+icc['AW'] = '297';
+icc['AU'] = '61';
+icc['AT'] = '43';
+icc['AZ'] = '994';
+icc['BS'] = '1242';
+icc['BH'] = '973';
+icc['BD'] = '880';
+icc['BB'] = '1246';
+icc['BY'] = '375';
+icc['BE'] = '32';
+icc['BZ'] = '501';
+icc['BJ'] = '229';
+icc['BM'] = '1441';
+icc['BT'] = '975';
+icc['BO'] = '591';
+icc['BA'] = '387';
+icc['BW'] = '267';
+icc['BR'] = '55';
+icc['IO'] = '246';
+icc['BN'] = '673';
+icc['BG'] = '359';
+icc['BF'] = '226';
+icc['BI'] = '257';
+icc['KH'] = '855';
+icc['CM'] = '237';
+icc['CA'] = '1';
+icc['CV'] = '238';
+icc['KY'] = '1345';
+icc['CF'] = '236';
+icc['TD'] = '235';
+icc['CL'] = '56';
+icc['CN'] = '86';
+icc['CX'] = '61';
+icc['CC'] = '672';
+icc['CO'] = '57';
+icc['KM'] = '269';
+icc['CG'] = '242';
+icc['CK'] = '682';
+icc['CR'] = '506';
+icc['CI'] = '225';
+icc['HR'] = '385';
+icc['CU'] = '53';
+icc['CY'] = '357';
+icc['CZ'] = '420';
+icc['DK'] = '45';
+icc['DJ'] = '253';
+icc['DM'] = '1767';
+icc['DO'] = '1';
+icc['TP'] = '670';
+icc['EC'] = '593';
+icc['EG'] = '20';
+icc['SV'] = '503';
+icc['GQ'] = '240';
+icc['ER'] = '291';
+icc['EE'] = '372';
+icc['ET'] = '251';
+icc['FK'] = '500';
+icc['FO'] = '298';
+icc['FJ'] = '679';
+icc['FI'] = '358';
+icc['FR'] = '33';
+icc['FX'] = '33';
+icc['GF'] = '594';
+icc['PF'] = '689';
+icc['TF'] = '262';
+icc['GA'] = '241';
+icc['GM'] = '220';
+icc['GE'] = '995';
+icc['DE'] = '49';
+icc['GH'] = '233';
+icc['GI'] = '350';
+icc['GR'] = '30';
+icc['GL'] = '299';
+icc['GD'] = '1473';
+icc['GP'] = '590';
+icc['GU'] = '1671';
+icc['GT'] = '502';
+icc['GN'] = '224';
+icc['GW'] = '245';
+icc['GY'] = '592';
+icc['HT'] = '509';
+icc['HN'] = '504';
+icc['HK'] = '852';
+icc['HU'] = '36';
+icc['IS'] = '354';
+icc['IN'] = '91';
+icc['ID'] = '62';
+icc['IR'] = '98';
+icc['IQ'] = '964';
+icc['IE'] = '353';
+icc['IL'] = '972';
+icc['IT'] = '39';
+icc['JM'] = '1876';
+icc['JP'] = '81';
+icc['JO'] = '962';
+icc['KZ'] = '7';
+icc['KE'] = '254';
+icc['KI'] = '686';
+icc['KP'] = '850';
+icc['KR'] = '82';
+icc['KW'] = '965';
+icc['KG'] = '996';
+icc['LA'] = '856';
+icc['LV'] = '371';
+icc['LB'] = '961';
+icc['LS'] = '266';
+icc['LR'] = '231';
+icc['LY'] = '218';
+icc['LI'] = '423';
+icc['LT'] = '370';
+icc['LU'] = '352';
+icc['MO'] = '853';
+icc['MK'] = '389';
+icc['MG'] = '261';
+icc['MW'] = '265';
+icc['MY'] = '60';
+icc['MV'] = '960';
+icc['ML'] = '223';
+icc['MT'] = '356';
+icc['MH'] = '692';
+icc['MQ'] = '596';
+icc['MR'] = '222';
+icc['MU'] = '230';
+icc['YT'] = '269';
+icc['MX'] = '52';
+icc['FM'] = '691';
+icc['MD'] = '373';
+icc['MC'] = '377';
+icc['MN'] = '976';
+icc['MS'] = '1664';
+icc['MA'] = '212';
+icc['MZ'] = '258';
+icc['MM'] = '95';
+icc['NA'] = '264';
+icc['NR'] = '674';
+icc['NP'] = '977';
+icc['NL'] = '31';
+icc['AN'] = '599';
+icc['NC'] = '687';
+icc['NZ'] = '64';
+icc['NI'] = '505';
+icc['NE'] = '227';
+icc['NG'] = '234';
+icc['NU'] = '683';
+icc['NF'] = '6723';
+icc['MP'] = '1670';
+icc['NO'] = '47';
+icc['OM'] = '968';
+icc['PK'] = '92';
+icc['PW'] = '680';
+icc['PA'] = '507';
+icc['PG'] = '675';
+icc['PY'] = '595';
+icc['PE'] = '51';
+icc['PH'] = '63';
+icc['PN'] = '64';
+icc['PL'] = '48';
+icc['PT'] = '351';
+icc['PR'] = '1';
+icc['QA'] = '974';
+icc['RO'] = '40';
+icc['RU'] = '7';
+icc['RW'] = '250';
+icc['KN'] = '1869';
+icc['LC'] = '1758';
+icc['VC'] = '1784';
+icc['WS'] = '685';
+icc['SM'] = '378';
+icc['ST'] = '239';
+icc['SA'] = '966';
+icc['SN'] = '221';
+icc['SC'] = '248';
+icc['SL'] = '232';
+icc['SG'] = '65';
+icc['SK'] = '421';
+icc['SI'] = '386';
+icc['SB'] = '677';
+icc['SO'] = '252';
+icc['ZA'] = '27';
+icc['GS'] = '27';
+icc['ES'] = '34';
+icc['LK'] = '94';
+icc['SH'] = '290';
+icc['PM'] = '508';
+icc['SD'] = '249';
+icc['SR'] = '597';
+icc['SZ'] = '268';
+icc['SE'] = '46';
+icc['CH'] = '41';
+icc['SY'] = '963';
+icc['TW'] = '886';
+icc['TJ'] = '992';
+icc['TZ'] = '255';
+icc['TH'] = '66';
+icc['TG'] = '228';
+icc['TK'] = '690';
+icc['TO'] = '676';
+icc['TT'] = '1868';
+icc['TN'] = '216';
+icc['TR'] = '90';
+icc['TM'] = '993';
+icc['TC'] = '1649';
+icc['TV'] = '688';
+icc['UG'] = '256';
+icc['UA'] = '380';
+icc['AE'] = '971';
+icc['GB'] = '44';
+icc['US'] = '1';
+icc['UM'] = '1';
+icc['UY'] = '598';
+icc['UZ'] = '998';
+icc['VU'] = '678';
+icc['VA'] = '379';
+icc['VE'] = '58';
+icc['VN'] = '84';
+icc['VG'] = '1284';
+icc['VI'] = '1340';
+icc['WF'] = '681';
+icc['EH'] = '212';
+icc['YE'] = '967';
+icc['YU'] = '11';
+icc['ZR'] = '243';
+icc['ZM'] = '260';
+icc['ZW'] = '263';
+
+
+function trim(s)
+{
+  return s.replace(/^\s+|\s+$/, '');
+} 
+
+
+function isInteger(s)
+{   var i;
+    for (i = 0; i < s.length; i++)
+    {   
+        // Check that current character is number.
+        var c = s.charAt(i);
+        if (((c < "0") || (c > "9"))) return false;
+    }
+    // All characters are numbers.
+    return true;
+}
+
+function stripCharsInBag(s, bag)
+{   var i;
+    var returnString = "";
+    // Search through string's characters one by one.
+    // If character is not in bag, append to returnString.
+    for (i = 0; i < s.length; i++)
+    {   
+        // Check that current character isn't whitespace.
+        var c = s.charAt(i);
+        if (bag.indexOf(c) == -1) returnString += c;
+    }
+    return returnString;
+}
+
+function checkInternationalPhone(strPhone){
+	var bracket=3
+	strPhone=trim(strPhone)
+	if(strPhone.indexOf("+")>1) return false
+	if(strPhone.indexOf("-")!=-1)bracket=bracket+1
+	if(strPhone.indexOf("(")!=-1 && strPhone.indexOf("(")>bracket)return false
+	var brchr=strPhone.indexOf("(")
+	if(strPhone.indexOf("(")!=-1 && strPhone.charAt(brchr+2)!=")")return false
+	if(strPhone.indexOf("(")==-1 && strPhone.indexOf(")")!=-1)return false
+	s=stripCharsInBag(strPhone,validWorldPhoneChars);
+	return (isInteger(s) && s.length >= minDigitsInIPhoneNumber);
+}
+
+function timeoutCheck(field, divid){
+
+	if(window.mytimeout) window.clearTimeout(window.mytimeout);
+	
+	
+	window.mytimeout = window.setTimeout(function(){toggle_field2(field, divid)}, delay);
+	
+	  setTimeout(function (){
+
+           reposition();
+
+         }, 300);
+	
+	return true;
+
+}
+
+
+function toggle_field2(field, divid) {
+	
+	handle = document.getElementById(field);
+	
+	
+	if ((handle.value.length > minlength) && (field != "company") && (field != "zip") &&  (field != "address") &&  (field != "city")) {
+		
+		
+		if (field == "name") {
+			if (handle.value.indexOf(' ') != -1) {
+				document.getElementById(divid).innerHTML = ok_image;
+			} else {
+				document.getElementById(divid).innerHTML = no_image;
+			}
+		
+		} else if (field == "email") {
+		
+			var tfld = trim(handle.value);                       
+			var emailFilter = /^[^@]+@[^@.]+\.[^@]*\w\w$/ ;
+			var illegalChars= /[\(\)\<\>\,\;\:"\[\]]/ ;
+			
+			if (!emailFilter.test(tfld)) {             
+				document.getElementById(divid).innerHTML = no_image;
+				
+			} else if (handle.value.match(illegalChars)) {
+				document.getElementById(divid).innerHTML = no_image;
+				
+			} else {
+				document.getElementById(divid).innerHTML = ok_image;
+			}
+		
+		} else if (field == "phone") {
+			
+				var Phone=handle.value;
+	
+				if ((Phone==null)||(Phone=="")){
+					document.getElementById(divid).innerHTML = no_image;
+				} else if (checkInternationalPhone(Phone)==false){
+					document.getElementById(divid).innerHTML = no_image;
+				} else {
+					if (Phone.charAt(0) != "+") {
+						document.getElementById(divid).innerHTML = no_image;
+						document.getElementById("phone_rule").innerHTML = "  <font color=#b40000>You must start with + followed by country code.</font>";
+						document.getElementById("phone_rule").style.display = '';
+					} else {
+						document.getElementById(divid).innerHTML = ok_image;
+						document.getElementById("phone_rule").innerHTML = "";
+						document.getElementById("phone_rule").style.display = 'none';
+					}
+				}
+	
+		}
+	
+	} else {
+		if ((field == "company") ||  (field == "zip") ||  (field == "phone")) {
+			if (handle.value.length > minlength) {
+				document.getElementById(divid).innerHTML = ok_image;
+			} else if (handle.value.length != 0) {
+				document.getElementById(divid).innerHTML = no_image;
+			}
+		} else if ((field == "city") && (handle.value.length > 0)) {
+			document.getElementById(divid).innerHTML = ok_image;
+		} else if ((field == "address") && (handle.value.length > minlength)) {
+			document.getElementById(divid).innerHTML = ok_image;
+		} else if (handle.value.length != 0) {
+			document.getElementById(divid).innerHTML = no_image;
+		}
+	}
+}
+
+
+
+
+function insertICC() {
+	var cc = document.getElementById("country").value;	
+	
+	iccnum = icc[cc];
+	currphone = document.getElementById("phone").value;
+	if (( currphone == '' ) || (currphone.length < 5 )) {
+		document.getElementById("phone").value = '+' + iccnum; }
+}
+
+// --></script>
+
+<script type="text/javascript">
+function checkCheckBox(f) {
+ 	
+	var termsdisplayed ='';
+	
+	if (document.getElementById('capture_12').currentStyle) { termsdisplayed = document.getElementById('capture_12').currentStyle.display;}
+	else
+	{termsdisplayed = getComputedStyle (document.getElementById('capture_12'), null).getPropertyValue('display');}
+	
+	 
+	 
+  if ((termsdisplayed  != 'none') && (f.agree.checked == false)) {
+    alert("You have to accept the User Agreement and Privacy Policy!");
+    return false;
+  } else
+   document.getElementById('freeform').submit();
+}
+</script>
+
+<style type="text/css">
+#autologin_form1{display:none;}
+
+</style>
+
+<style type="text/css">
+
+.style1 {font-size: 11px}
+#capture_1{display:none;}
+#capture_2{display:none;}
+#capture_3{display:none;}
+#capture_4{display:none;}
+#capture_5{display:none;}
+#capture_6{display:none;}
+#capture_7{display:none;}
+#capture_8{display:none;}
+#capture_9{display:none;}
+#capture_10{display:none;}
+#capture_11{display:none;}
+#capture_custom_1{display:none;}
+#capture_custom_2{display:none;}
+#capture_custom_3{display:none;}
+#capture_custom_4{display:none;}
+#capture_custom_5{display:none;}
+
+#fb_thankyou{display:none;}
+#fb_accept{display:none;}
+#error_1_1{display:none;}
+#error_3_1{display:none;}
+
+</style>
+
+
+<table cellpadding="0" cellspacing="0" border="0"  >
+
+
+<tr>
+            <td colspan="5" align="center">
+            
+                  
+            
+    
+           
+<span class=big>
+<b>Welcome to our HotSpot !</b><br />
+
+<!-- <b> GARETS.TENSPOT.NET</b> --> <br /> garets.tenspot.net<BR>607 3rd Ave, Seattle 98104<BR>Phone: 971-910-3462<BR>E-mail: <a href='mailto:garet@email.com'>garet@email.com</a>
+</span>
+
+    <div  style="width:696px; border:#c0c0c0 1px solid;margin-top:10px; text-align:center;" > 
+<div style="padding:10px;">
+     <span class="boxhead" style="display:inline;left:0px;top:7px;position:relative;float:none;"><img src="https://customer.hotspotsystem.com/customer/customer_images/hotel/m_login.png" hspace="0" border="0" align="absmiddle" style="margin-top:-1px;" /></span><span class="boxhead" style="display:inline;float:none;left0px;top:10px;position:relative;"> <strong>Please log in to Hotspot</strong></span>   
+    </div><br>
+<FORM METHOD='get' action=="https://customer.hotspotsystem.com/customer/hotspotlogin.php" onsubmit="return checkCheckBox(this);" >
+ <center><div align="center" style="width:500px;"><!--<BR>--><br></div></center>
+  <center><div align="center" style="width:500px;"></div></center>
+<table cellspacing=1 cellpadding=3 width="100%" border=0  class="table-big_noalign">
+      
+        
+            
+  <tr  id="capture_2">
+    <td  align=right width="200">
+      <span class="big">*Name:</span></td>
+    <td align=left width="305">   <span    >
+      <input 
+        name=name type=text class=forminput id="name" value="1"  style="display: inline;" onkeyup="timeoutCheck('name', 'name_valid')" />  <div id="name_valid" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div>  </span>  </td>
+  </tr>
+  <tr  id="capture_3">
+    <td  align="right" width="39%"><span class="big">*E-mail:</span></td>
+    <td align=left><span    > <input 
+        name="email" type="text" class="forminput" id="email" value=""  style="display: inline;" onkeyup="timeoutCheck('email', 'email_valid')" />  <div id="email_valid" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div>  </span>  </td>
+  </tr>
+  <tr id="capture_4">
+    <td  align=right  width="39%"><span class="big">Company Name:</span></td>
+    <td align=left><span    ><input 
+        name=company type=text class=forminput id="company" value="" onkeyup="timeoutCheck('company', 'company_valid')" />  <div id="company_valid" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div>   </span> </td>
+  </tr>
+  <tr id="capture_5">
+    <td  align=right  width="39%">
+      <span class="big">*Billing Address:</span></td>
+    <td align=left width="305">
+      <span    >  <input 
+        name=address type=text class=forminput id="address" value="" onkeyup="timeoutCheck('address', 'address_valid')" />  <div id="address_valid" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div></span>    </td>
+  </tr>
+  <tr id="capture_6">
+    <td  align=right  width="39%" >
+      <span class="big">*City:</span></td>
+    <td align=left width="305">
+      <span    >  <input 
+        name=city type=text class=forminput id="city" value="" onkeyup="timeoutCheck('city', 'city_valid')" />  <div id="city_valid" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div>  </span>  </td>
+  </tr>
+  <tr id="capture_7">
+    <td  align="right" width="39%"><span class="big">*State:</span></td>
+    <td align=left><span    ><select name="state" id="state" class="selectinput">
+        <option value="">Outside U.S.</option>
+      
+      {STATES}
+    
+    </select> </span>  </td>
+  </tr>
+  <tr id="capture_8">
+    <td  align="right"  width="39%"> <span class="big">*Country:</span></td>
+    <td align=left>   <span    ><select name="country" id="country" class="selectinput" onchange="insertICC()" {COUNTRYDISABLED}>
+        <option value="">Please choose!</option>
+      
+      {COUNTRIES}
+    
+    </select></span>
+    </td>
+  </tr>
+  
+  <tr id="capture_9">
+    <td  align=right  width="39%">
+      <span class="big">ZIP:</span></td>
+    <td align=left width="305">
+     <span    >  <input 
+        name=zip type=text class=forminput id="zip" value="" onkeyup="timeoutCheck('zip', 'zip_valid')" />  <div id="zip_valid" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div>  </span>    </td>
+  </tr>
+  <tr id="capture_10">
+    <td  align="right" width="39%"><span class="big">Phone:</span></td>
+    <td align=left><span    ><input 
+        name="phone" type="text" class="forminput" id="phone" value="" onkeyup="timeoutCheck('phone', 'phone_valid')" {PHONEDISABLED} />  <div id="phone_valid" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div> <span class="style1" id="phone_rule">(international format)</span></span>     </td>
+  </tr>
+  
+<tr id="capture_custom_1">
+    <td  align=right  width="39%" ><span class="big"></span></td>
+    <td align=left><span    ><input   name="capture_custom_1" type=text class=forminput id="capture_custom_1" value=""  onkeyup="if (this.value.length > 0) { document.getElementById('ccc1').innerHTML = ok_image;reposition(); }"  /> <div id="ccc1" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div>  </span>   </td>
+  </tr>
+
+<tr id="capture_custom_2">
+    <td  align=right  width="39%"><span class="big"></span></td>
+    <td align=left><span    ><input  name="capture_custom_2" type=text class=forminput id="capture_custom_2" value=""   onkeyup="if (this.value.length > 0) { document.getElementById('ccc2').innerHTML = ok_image; reposition();}"  /> <div id="ccc2" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div>   </span>   </td>
+  </tr>
+
+<tr id="capture_custom_3">
+    <td  align=right  width="39%"><span class="big"></span></td>
+    <td align=left><span    ><input  name="capture_custom_3" type=text class=forminput id="capture_custom_3" value="" onkeyup="if (this.value.length > 0) { document.getElementById('ccc3').innerHTML = ok_image; reposition();}"  /> <div id="ccc3" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div>    </span>   </td>
+  </tr>
+  
+<tr id="capture_custom_4">
+    <td  align=right  width="39%"><span class="big"></span></td>
+    <td align=left><span    ><input   name="capture_custom_4" type=text class=forminput id="capture_custom_4" value=""   onkeyup="if (this.value.length > 0) { document.getElementById('ccc4').innerHTML = ok_image;reposition(); }"  /> <div id="ccc4" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div>  </span>   </td>
+  </tr>
+  
+ <tr id="capture_custom_5">
+    <td  align=right  width="39%"><span class="big"></span></td>
+    <td align=left><span    ><input  name="capture_custom_5" type=text class=forminput id="capture_custom_5" value=""  onkeyup="if (this.value.length > 0) { document.getElementById('ccc5').innerHTML = ok_image;reposition(); }"  /> <div id="ccc5" style="display: inline; font-size: 11px; font-weight: bold; color:#FF3300"></div>   </span>  </td>
+  </tr>     
+  
+  <tr id="capture_note">
+    <td  align=center colspan=2><span class="">NOTE: Fields marked with an * are required!<BR><BR></span></td>
+  </tr>
+
+<tr><td align="center" colspan=2>
+	      
+	  
+   <INPUT TYPE=HIDDEN NAME="chal" VALUE="">
+   <INPUT TYPE=HIDDEN NAME="uamip" VALUE="">
+   <INPUT TYPE=HIDDEN NAME="uamport" VALUE="">
+   <INPUT TYPE=HIDDEN NAME="nasid" VALUE="izryel_5">
+   <INPUT TYPE=HIDDEN NAME="mac" VALUE="">
+   <INPUT TYPE=HIDDEN NAME="userurl" VALUE="">
+   <INPUT TYPE=HIDDEN NAME="login" VALUE="login">
+   <input name="skin_id" type="hidden" id="skin_id" value="" />
+<input name="uid" type="hidden" value="" />
+   <input name="pwd" type="hidden" value="password" />
+<input name="operator" type="hidden" id="operator" value="izryel">
+<input name="location_id" type="hidden" id="location_id" value="5">
+<input name="lang" type="hidden" id="location_id" value="en">
+   <center>
+  <span id="fb_thankyou" class="big">
+Thank you for Liking Us! You can log in now and use the internet for free.<BR><BR>
+</span>
+
+
+ <div  id="capture_11" class="big" >
+        <input name="newsletter" type="checkbox" id="newsletter" value="1" style="vertical-align:middle;margin-top:-1px;"  {NEWSLETTER_DISABLED}> 
+       Subscribe to our e-newsletter <br><br>  </div>
+
+<div  id="capture_12" class="big" >
+         <input name="agree" type="checkbox" id="agree" value="1" style="vertical-align:middle;margin-top:-3px;" > 
+       I ACCEPT the terms <span class='termspan'>of the <a href='/customer/info.php?page=useragreement&operator=izryel&location=5&lang=en' target='_blank'>User Agreement</a> and <a href='/customer/info.php?page=privacy&operator=izryel&location=5&lang=en' target='_blank'>Privacy Policy</a>.</span> <BR><BR> </div>
+       
+
+<span id="fb_accept" class="big">
+<img src='customer_images/fb_logo.png' style='margin-right:5px;vertical-align:middle;' />LIKE US on Facebook and Get Free Internet Access!
+</span>
+ 
+<input type=submit name=submit value="LOG IN TO HOTSPOT" class="formbutton"> </p>
+    
+      <p class="big"></p>
+      <p><span id="error_1_2" >NOTE: You have to enable popup windows to see your account and logout information.</span></p>
+       </td>
+  </tr>
+
+  
+
+    </div></td>
+  </tr>
+ <tr >
+            <td  align=right width="39%">  </td>
+            <td align=left width="305"> </td>
+          </tr>
+      </table>
+   
+            <br /> </form>
+
+ </td>
+            </tr>
+            
+            </table>
+ 
+            
+
+<!--  
+****************************************************************
+main_footer.inc.html
+**************************************************************** 
+-->
+
+<br><a href=="https://customer.hotspotsystem.com/customer/info.php?operator=izryel&location=5&lang=en&page=guide&worldpay=&paypal=&prepaid=" target="_blank" style="display:none;">Guide to using our system</a></span><BR />
+
+
+
+
+
+<!--  
+****************************************************************
+footer.inc.html
+**************************************************************** 
+-->
+
+  </div>  
+   
+		
+ </div> 
+        
+        
+         
+
+  <!-- Middle box end -->  
+
+      <br /> 
+ <div align="center" style=" margin-right:10px; line-height:20px " class="blue"><a href=="https://customer.hotspotsystem.com/customer/prelogin.php?operator=izryel&location=5&lang=en&uamip=&uamport=" class="blue" >Hotspot Start Page</a>  |  <a href=="https://customer.hotspotsystem.com/customer/info.php?operator=izryel&location=5&page=csupport&amp;lang=en" class="blue" >Customer Service</a>  |  <a href=="https://customer.hotspotsystem.com/customer/info.php?operator=izryel&location=5&page=privacy&amp;lang=en" class="blue">Privacy Policy</a>  |  <a href=="https://customer.hotspotsystem.com/customer/info.php?operator=izryel&location=5&page=disclaimer&amp;lang=en" class="blue">Disclaimer</a></div>
+				  <div align="center" style=" margin-right:10px; line-height:25px; color:#000000; " class="blue" >&copy; 2025 <a href='http://www.hotspotsystem.com' target='_blank'>HotspotSystem.com</a></div><BR>
+ <div align="center" style=" margin-right:10px; line-height:25px; color:#000000; " class="blue" >
+
+<!--
+<img src='customer_images/generic/adyen_white2.png' border=0 alt='Powered By Adyen'>--> 
+
+
+<!--
+<a href='http://www.paypal.com/'><img src='customer_images/basic/palybal_black.png' alt='PayPal AMEX Discover' align='top' border='0' /></a>-->
+
+</div>
+
+<BR><BR>
+
+</body>
+</html>

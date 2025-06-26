@@ -1,0 +1,821 @@
+<!-- <script src="/scripts/mailgun/mailgun_validator.js"></script> -->
+<script type="text/javascript"><!--
+
+// Custom settings
+
+var minlength = '3';  // Set to minimum required characters as specified in your form
+
+var delay = '0';  // Time of inactivity to check. Always in milliseconds! (1 sec = 1000 millisec.)
+
+var ok_image = "<img src='customer_images/check.jpg' style='vertical-align:middle;margin-top:-3px;'/>";
+var no_image = "<img src='customer_images/cross.jpg' style='vertical-align:middle;margin-top:-3px;' />";
+
+
+// Declaring required variables
+var digits = "0123456789";
+// non-digit characters which are allowed in phone numbers
+var phoneNumberDelimiters = "()- ";
+// characters which are allowed in international phone numbers
+// (a leading + is OK)
+var validWorldPhoneChars = phoneNumberDelimiters + "+";
+// Minimum no of digits in an international phone no.
+var minDigitsInIPhoneNumber = 10;
+
+var icc = [];
+
+icc['AF'] = '93';
+icc['AL'] = '355';
+icc['DZ'] = '213';
+icc['AS'] = '1684';
+icc['AD'] = '376';
+icc['AO'] = '244';
+icc['AI'] = '1264';
+icc['AG'] = '1268';
+icc['AR'] = '54';
+icc['AM'] = '374';
+icc['AW'] = '297';
+icc['AU'] = '61';
+icc['AT'] = '43';
+icc['AZ'] = '994';
+icc['BS'] = '1242';
+icc['BH'] = '973';
+icc['BD'] = '880';
+icc['BB'] = '1246';
+icc['BY'] = '375';
+icc['BE'] = '32';
+icc['BZ'] = '501';
+icc['BJ'] = '229';
+icc['BM'] = '1441';
+icc['BT'] = '975';
+icc['BO'] = '591';
+icc['BA'] = '387';
+icc['BW'] = '267';
+icc['BR'] = '55';
+icc['IO'] = '246';
+icc['BN'] = '673';
+icc['BG'] = '359';
+icc['BF'] = '226';
+icc['BI'] = '257';
+icc['KH'] = '855';
+icc['CM'] = '237';
+icc['CA'] = '1';
+icc['CV'] = '238';
+icc['KY'] = '1345';
+icc['CF'] = '236';
+icc['TD'] = '235';
+icc['CL'] = '56';
+icc['CN'] = '86';
+icc['CX'] = '61';
+icc['CC'] = '672';
+icc['CO'] = '57';
+icc['KM'] = '269';
+icc['CG'] = '242';
+icc['CK'] = '682';
+icc['CR'] = '506';
+icc['CI'] = '225';
+icc['HR'] = '385';
+icc['CU'] = '53';
+icc['CY'] = '357';
+icc['CZ'] = '420';
+icc['DK'] = '45';
+icc['DJ'] = '253';
+icc['DM'] = '1767';
+icc['DO'] = '1';
+icc['TP'] = '670';
+icc['EC'] = '593';
+icc['EG'] = '20';
+icc['SV'] = '503';
+icc['GQ'] = '240';
+icc['ER'] = '291';
+icc['EE'] = '372';
+icc['ET'] = '251';
+icc['FK'] = '500';
+icc['FO'] = '298';
+icc['FJ'] = '679';
+icc['FI'] = '358';
+icc['FR'] = '33';
+icc['FX'] = '33';
+icc['GF'] = '594';
+icc['PF'] = '689';
+icc['TF'] = '262';
+icc['GA'] = '241';
+icc['GM'] = '220';
+icc['GE'] = '995';
+icc['DE'] = '49';
+icc['GH'] = '233';
+icc['GI'] = '350';
+icc['GR'] = '30';
+icc['GL'] = '299';
+icc['GD'] = '1473';
+icc['GP'] = '590';
+icc['GU'] = '1671';
+icc['GT'] = '502';
+icc['GN'] = '224';
+icc['GW'] = '245';
+icc['GY'] = '592';
+icc['HT'] = '509';
+icc['HN'] = '504';
+icc['HK'] = '852';
+icc['HU'] = '36';
+icc['IS'] = '354';
+icc['IN'] = '91';
+icc['ID'] = '62';
+icc['IR'] = '98';
+icc['IQ'] = '964';
+icc['IE'] = '353';
+icc['IL'] = '972';
+icc['IT'] = '39';
+icc['JM'] = '1876';
+icc['JP'] = '81';
+icc['JO'] = '962';
+icc['KZ'] = '7';
+icc['KE'] = '254';
+icc['KI'] = '686';
+icc['KP'] = '850';
+icc['KR'] = '82';
+icc['KW'] = '965';
+icc['KG'] = '996';
+icc['LA'] = '856';
+icc['LV'] = '371';
+icc['LB'] = '961';
+icc['LS'] = '266';
+icc['LR'] = '231';
+icc['LY'] = '218';
+icc['LI'] = '423';
+icc['LT'] = '370';
+icc['LU'] = '352';
+icc['MO'] = '853';
+icc['MK'] = '389';
+icc['MG'] = '261';
+icc['MW'] = '265';
+icc['MY'] = '60';
+icc['MV'] = '960';
+icc['ML'] = '223';
+icc['MT'] = '356';
+icc['MH'] = '692';
+icc['MQ'] = '596';
+icc['MR'] = '222';
+icc['MU'] = '230';
+icc['YT'] = '269';
+icc['MX'] = '52';
+icc['FM'] = '691';
+icc['MD'] = '373';
+icc['MC'] = '377';
+icc['MN'] = '976';
+icc['MS'] = '1664';
+icc['MA'] = '212';
+icc['MZ'] = '258';
+icc['MM'] = '95';
+icc['NA'] = '264';
+icc['NR'] = '674';
+icc['NP'] = '977';
+icc['NL'] = '31';
+icc['AN'] = '599';
+icc['NC'] = '687';
+icc['NZ'] = '64';
+icc['NI'] = '505';
+icc['NE'] = '227';
+icc['NG'] = '234';
+icc['NU'] = '683';
+icc['NF'] = '6723';
+icc['MP'] = '1670';
+icc['NO'] = '47';
+icc['OM'] = '968';
+icc['PK'] = '92';
+icc['PW'] = '680';
+icc['PA'] = '507';
+icc['PG'] = '675';
+icc['PY'] = '595';
+icc['PE'] = '51';
+icc['PH'] = '63';
+icc['PN'] = '64';
+icc['PL'] = '48';
+icc['PT'] = '351';
+icc['PR'] = '1';
+icc['QA'] = '974';
+icc['RO'] = '40';
+icc['RU'] = '7';
+icc['RW'] = '250';
+icc['KN'] = '1869';
+icc['LC'] = '1758';
+icc['VC'] = '1784';
+icc['WS'] = '685';
+icc['SM'] = '378';
+icc['ST'] = '239';
+icc['SA'] = '966';
+icc['SN'] = '221';
+icc['SC'] = '248';
+icc['SL'] = '232';
+icc['SG'] = '65';
+icc['SK'] = '421';
+icc['SI'] = '386';
+icc['SB'] = '677';
+icc['SO'] = '252';
+icc['ZA'] = '27';
+icc['GS'] = '27';
+icc['ES'] = '34';
+icc['LK'] = '94';
+icc['SH'] = '290';
+icc['PM'] = '508';
+icc['SD'] = '249';
+icc['SR'] = '597';
+icc['SZ'] = '268';
+icc['SE'] = '46';
+icc['CH'] = '41';
+icc['SY'] = '963';
+icc['TW'] = '886';
+icc['TJ'] = '992';
+icc['TZ'] = '255';
+icc['TH'] = '66';
+icc['TG'] = '228';
+icc['TK'] = '690';
+icc['TO'] = '676';
+icc['TT'] = '1868';
+icc['TN'] = '216';
+icc['TR'] = '90';
+icc['TM'] = '993';
+icc['TC'] = '1649';
+icc['TV'] = '688';
+icc['UG'] = '256';
+icc['UA'] = '380';
+icc['AE'] = '971';
+icc['GB'] = '44';
+icc['US'] = '1';
+icc['UM'] = '1';
+icc['UY'] = '598';
+icc['UZ'] = '998';
+icc['VU'] = '678';
+icc['VA'] = '379';
+icc['VE'] = '58';
+icc['VN'] = '84';
+icc['VG'] = '1284';
+icc['VI'] = '1340';
+icc['WF'] = '681';
+icc['EH'] = '212';
+icc['YE'] = '967';
+icc['YU'] = '11';
+icc['ZR'] = '243';
+icc['ZM'] = '260';
+icc['ZW'] = '263';
+
+function next(elem) {
+    do {
+        elem = elem.nextSibling;
+    } while (elem && elem.nodeType !== 1);
+    return elem;        
+}
+
+
+function removeerror (field)
+{
+
+   if (document.getElementById(field).className== "responsive_noerror")
+	 { 
+		 var elem = document.getElementById(field);
+		 var nextElem = next(elem); 
+         if (nextElem)   nextElem.style.display = 'none';
+		  }
+		  
+  }
+  
+function trim(s)
+{
+  return s.replace(/^\s+|\s+$/, '');
+} 
+
+
+function isInteger(s)
+{   var i;
+    for (i = 0; i < s.length; i++)
+    {   
+        // Check that current character is number.
+        var c = s.charAt(i);
+        if (((c < "0") || (c > "9"))) return false;
+    }
+    // All characters are numbers.
+    return true;
+}
+
+function stripCharsInBag(s, bag)
+{   var i;
+    var returnString = "";
+    // Search through string's characters one by one.
+    // If character is not in bag, append to returnString.
+    for (i = 0; i < s.length; i++)
+    {   
+        // Check that current character isn't whitespace.
+        var c = s.charAt(i);
+        if (bag.indexOf(c) == -1) returnString += c;
+    }
+    return returnString;
+}
+
+function checkInternationalPhone(strPhone){
+	var bracket=3
+	strPhone=trim(strPhone)
+	if(strPhone.indexOf("+")>1) return false
+	if(strPhone.indexOf("-")!=-1)bracket=bracket+1
+	if(strPhone.indexOf("(")!=-1 && strPhone.indexOf("(")>bracket)return false
+	var brchr=strPhone.indexOf("(")
+	if(strPhone.indexOf("(")!=-1 && strPhone.charAt(brchr+2)!=")")return false
+	if(strPhone.indexOf("(")==-1 && strPhone.indexOf(")")!=-1)return false
+	s=stripCharsInBag(strPhone,validWorldPhoneChars);
+	return (isInteger(s) && s.length >= minDigitsInIPhoneNumber);
+}
+
+ 
+
+function toggle_field2(field) {
+	
+	handle = document.getElementById(field);
+	
+	if (field == "password" ) {
+	
+		handle2 = document.getElementById("loginname");
+	 
+	
+	} else if (field == "repeatpassword" ) {
+	
+		handle2 = document.getElementById("password");
+	}
+	
+ 
+
+	
+		if ((field == "password") && (handle.value.length < minlength))
+    {document.getElementById(field).className = "responsive_error";}
+	
+	if ((field == "repeatpassword") && (handle.value.length < minlength))
+    {document.getElementById(field).className = "responsive_error";}
+	
+	 
+	
+	if ((field == "name") && (handle.value.length < minlength))
+    {document.getElementById(field).className = "responsive_error";}
+	
+	
+	
+	if ((field == "email") && (handle.value.length < minlength))
+    {document.getElementById(field).className = "responsive_error";}
+	
+	
+	if ((field == "c_custom_1") || (field == "c_custom_2") || (field == "c_custom_3") || (field == "c_custom_4") || (field == "c_custom_5")) 
+		{
+			
+			
+			if (handle.value.length > minlength) 
+			  {
+						document.getElementById(field).className = "responsive_noerror";
+			   } 
+			   
+			   else  
+			     {
+				document.getElementById(field).className = "responsive_error";
+				}
+			
+		}
+	
+	
+	
+	if ((handle.value.length > minlength) && (field != "company") && (field != "zip") &&  (field != "address") &&  (field != "city"))
+	 {
+		
+		
+		if (field == "password")
+		
+		 {
+			if (handle.value.indexOf(' ') == -1) 
+			{
+				
+				if (handle.value == handle2.value) 
+				{ 
+						document.getElementById(field).className = "responsive_error";
+						document.getElementById("password_rule").innerHTML = " {LANG:username_password}";
+					 
+				} else 
+				{
+					document.getElementById(field).className = "responsive_noerror";
+						document.getElementById("password_rule").innerHTML = "";
+				}
+			} 
+			
+			else 
+			
+			{
+				 
+				document.getElementById("password_rule").className = "responsive_error";
+				document.getElementById("password_rule").innerHTML = " {LANG:nospecials}";
+			}
+			
+			
+			
+		
+		 }
+		
+		 else if (field == "repeatpassword") 
+		
+		{
+			if (handle.value != handle2.value) 
+			{ 
+				document.getElementById(field).className = "responsive_error";
+				document.getElementById("password2_rule").innerHTML = " {LANG:passwords_nomatch}";
+				 
+			} else 
+			{
+				document.getElementById(field).className = "responsive_noerror";
+				document.getElementById("password2_rule").innerHTML = "";
+			 
+			}
+		
+		}
+	  
+		
+		
+		else if (field == "name") 
+		{
+			if (handle.value.indexOf(' ') != -1) {
+				document.getElementById(field).className = "responsive_noerror";
+			} else {
+				document.getElementById(field).className = "responsive_error";
+		}
+		
+		}
+			
+		
+		
+
+		
+		else if (field == "email")
+		 {
+		
+			var tfld = trim(handle.value);                       
+			var emailFilter = /^[^@]+@[^@.]+\.[^@]*\w\w$/ ;
+			var illegalChars= /[\(\)\<\>\,\;\:"\[\]]/ ;
+			
+			if (!emailFilter.test(tfld)) {             
+		document.getElementById(field).className = "responsive_error";
+				
+			} else if (handle.value.match(illegalChars)) {
+			document.getElementById(field).className = "responsive_error";
+				
+			} else {
+				document.getElementById(field).className = "responsive_noerror";
+			}
+		
+		} 
+		
+		else if (field == "phone") 
+		{
+			
+				var Phone=handle.value;
+	 
+
+				if ((Phone==null)||(Phone=="")){
+					document.getElementById(field).className = "responsive_error";
+				} else if (checkInternationalPhone(Phone)==false){
+					document.getElementById(field).className = "responsive_error";
+				} else {
+					if (Phone.charAt(0) != "+") {
+						document.getElementById(field).className = "responsive_error";
+						document.getElementById("phone_rule").innerHTML = " {LANG:cust_phone_format}";
+						document.getElementById("phone_rule").style.display = '';
+					} else {
+						document.getElementById(field).className = "responsive_noerror";
+						document.getElementById("phone_rule").innerHTML = "";
+						document.getElementById("phone_rule").style.display = 'none';
+					}
+				}
+	
+		} 
+		
+		
+	
+	}
+	
+	
+	
+	if ((field == "company") ||  (field == "zip") ||  (field == "phone") ||  (field == "city") ||  (field == "address"))
+	 {
+			
+			if (handle.value.length > minlength) {
+						document.getElementById(field).className = "responsive_noerror";
+			}
+			else {
+				document.getElementById(field).className = "responsive_error";
+			}
+			
+		} 
+		
+	   
+	removeerror(field);
+		  
+     
+	 
+	
+	
+}
+
+
+
+function statechange_field(field) {
+
+	if (http.readyState == 4) {
+	
+		var html = http.responseText;
+		
+		if (html == 'true') {
+			document.getElementById(field).className = "responsive_noerror";
+			document.getElementById("username_rule").innerHTML = "";
+			 
+		} else if (html == 'username_exists') {
+			document.getElementById(field).className = "responsive_error";
+			document.getElementById("username_rule").innerHTML = " {LANG:username_exists}";
+		} else {
+		    document.getElementById(field).className = "responsive_noerror";
+			document.getElementById("username_rule").innerHTML = "";
+		}
+	}
+
+}
+
+function insertICC(field) {
+	var cc = document.getElementById("country").value;	
+	
+	iccnum = icc[cc];
+	currphone = document.getElementById("phone").value;
+	if (( currphone == '' ) || (currphone.length < 5 )) {
+		document.getElementById("phone").value = '+' + iccnum; }
+		
+		
+	handle = document.getElementById(field);
+	vlue= handle.options[handle.selectedIndex].value; 
+	if ( vlue != "") {
+	  document.getElementById(field).className = "responsive_noerror";	
+	}
+	else {
+	document.getElementById(field).className = "responsive_error";	
+	}
+	
+	removeerror(field);
+	
+		  
+}
+
+ 
+// --></script>
+
+<script type="text/javascript">
+function checkCheckBox(f) {
+ 	
+	var termsdisplayed ='';
+	
+	if (document.getElementById('capture_12').currentStyle) { termsdisplayed = document.getElementById('capture_12').currentStyle.display;}
+	else
+	{termsdisplayed = getComputedStyle (document.getElementById('capture_12'), null).getPropertyValue('display');}
+	
+	 
+	 
+  if ((termsdisplayed  != 'none') && (f.agree.checked == false)) {
+    alert("{LANG:accept_terms}");
+    return false;
+  } else
+   document.getElementById('freeform').submit();
+}
+</script>
+
+
+<style type="text/css">
+#autologin_form1{display:none;}
+
+</style>
+
+<style type="text/css">
+<!--
+ 
+{CAPTURE_HIDE}
+{DIVHIDE}
+-->
+</style>
+
+ 
+	 
+            <!-- <top> -->
+       
+            <div id="top" class="combinedtop">
+            <div class="main_center">
+          <!--  <strong class="logo"><a href="index.html">HotspotSystem</a></strong>	 -->   
+    
+                <strong class="big_header">{LANG:welcome_header}</strong>
+             <p class='locationdata'>{LOCATIONDATA}</p>
+            </div>
+          </div>
+        <!-- </top> -->
+        
+           <center> <div  id="topright">  {TOP_RIGHT}  </div> <br><BR> </center>
+        
+        <FORM METHOD='get' action="{LOGINPATH}" onsubmit="return checkCheckBox(this);" class="dataform" id="freeform">
+
+<div class="center autologin_center"  >		
+<div class="new_customer">
+ <div class="main_center">						
+ <div class="border_panel">
+ 
+<p><b>{LANG:login_required}</b></p>
+
+ <center><p align="center" class="autologin_error" ><!--{CAPTURE_ERROR}-->{CAPTURE_QTIPERROR}</font></p></center>
+  
+  						
+
+  					
+						<div class="field field_username" id="capture_2">
+							<div class="label">{CAPTURE_2_REQ}{LANG:cust_name}</div>
+							<div class="col">
+                        <input   name=name type=text  id="name" value="{CUST_NAME}" class="{RESPONSIVE_ERROR_003}"   onkeyup="toggle_field2('name')" /> 
+							 <span class="msg">{RESPONSIVE_ERRORTEXT_003}  {RESPONSIVE_ERRORTEXT_DETAILED_003}</span>
+							</div>
+							<div class="clear"></div>
+						</div>
+                         
+                        
+                        <div class="field field_email"  id="capture_3">
+							<div class="label">{CAPTURE_3_REQ}{LANG:cust_email}</div>
+							<div class="col">
+								 <!--  <input name="email" type="text"  id="email"  value="{CUST_EMAIL}"  class="{RESPONSIVE_ERROR_004}"   />   -->
+                                <input name="email" type="text"  id="email"  value="{CUST_EMAIL}"  class="{RESPONSIVE_ERROR_004}"  onKeyUp="toggle_field2('email')" />  <!--    -->
+								<span  id="status" class="msg">{RESPONSIVE_ERRORTEXT_004}  {RESPONSIVE_ERRORTEXT_DETAILED_004}</span>
+							</div>
+							<div class="clear"></div>
+						</div>	
+						
+						<div class="field field_company_name" id="capture_4">
+							<div class="label">{CAPTURE_4_REQ}{LANG:cust_company}</div>
+							<div class="col">
+								<input name="company" type=text  id="company" value="{CUST_COMPANY}" class="{RESPONSIVE_ERROR_005}"   onKeyUp="toggle_field2('company')" /> 
+								<span class="msg">{RESPONSIVE_ERRORTEXT_005}</span>
+							</div>
+							<div class="clear"></div>
+						</div>
+						
+						<div class="field field_billing_address" id="capture_5">
+							<div class="label">{CAPTURE_5_REQ}{LANG:cust_billing_address}</div>
+							<div class="col">
+									<input name=address type=text   id="address" value="{CUST_ADDRESS}" class="{RESPONSIVE_ERROR_006}"   onKeyUp="toggle_field2('address')" /> 
+								<span class="msg">{RESPONSIVE_ERRORTEXT_006} </span>
+							</div>
+							<div class="clear"></div>
+						</div>
+						
+						<div class="field field_city" id="capture_6">
+							<div class="label">{CAPTURE_6_REQ}{LANG:cust_city}</div>
+							<div class="col">
+							 <input   name=city type=text  id="city" value="{CUST_CITY}" class="{RESPONSIVE_ERROR_007}"  onKeyUp="toggle_field2('city')" />  
+								<span class="msg">{RESPONSIVE_ERRORTEXT_007}</span>
+							</div>
+							<div class="clear"></div>
+						</div>
+						
+						<div class="field field_state" id="capture_7">
+							<div class="label">{CAPTURE_7_REQ}{LANG:cust_state}</div>
+							<div class="col">
+								<select name="state" id="state"  class="{RESPONSIVE_ERROR_009}" >
+                            <option value="">{LANG:state_outside}</option>
+                          {STATES}
+                        
+                        </select>
+								<span class="msg">{RESPONSIVE_ERRORTEXT_009}</span>
+							</div>
+							<div class="clear"></div>
+						</div>
+						
+						<div class="field field_country" id="capture_8">
+							<div class="label">{CAPTURE_8_REQ}{LANG:cust_country}</div>
+							<div class="col">
+								<select name="country" id="country"    onChange="insertICC('country')" {COUNTRYDISABLED} class="{RESPONSIVE_ERROR_010}"  >
+                                      <option value="">{LANG:country_choose}</option>
+                                    
+                                    {COUNTRIES}
+                                  
+                                  </select>
+								<span class="msg">{RESPONSIVE_ERRORTEXT_010} </span>
+							</div>
+							<div class="clear"></div>
+						</div>
+						
+						<div class="field field_zip" id="capture_9">
+							<div class="label">{CAPTURE_9_REQ}{LANG:cust_zip}</div>
+							<div class="col">
+								 <input name=zip type=text   id="zip" value="{CUST_ZIP}" class="{RESPONSIVE_ERROR_008}"  onKeyUp="toggle_field2('zip')" /> 
+								<span class="msg">{RESPONSIVE_ERRORTEXT_008} </span>
+							</div>
+							<div class="clear"></div>
+						</div>
+						
+						<div class="field field_phone" id="capture_10">
+							<div class="label">{CAPTURE_10_REQ}{LANG:cust_phone}</div>
+							<div class="col">
+								<input name="phone" type="text"  id="phone" value="{CUST_PHONE}" class="{RESPONSIVE_ERROR_011}"  onKeyUp="toggle_field2('phone')" {PHONEDISABLED} />  				<span class="msg">{RESPONSIVE_ERRORTEXT_011} </span>
+								<span class="info">{LANG:cust_phone_rule}</span>
+							
+							</div>
+							<div class="clear"></div>
+						</div>		
+                        
+                        <div class="field field_custom" id="capture_custom_1">
+							<div class="label">{CAPTURE_CUSTOM_1_REQ}{CAPTURE_CUSTOM_1_Q}</div>
+							<div class="col">
+								<input   name="capture_custom_1" type=text  id="c_custom_1" value="{CAPTURE_CUSTOM_1_A}" class="{RESPONSIVE_ERROR_051}"   onKeyUp="toggle_field2('c_custom_1')" />
+							 <span class="msg">{RESPONSIVE_ERRORTEXT_051}</span>
+							</div>
+							<div class="clear"></div>
+						</div>			
+                        
+                         <div class="field field_custom" id="capture_custom_2">
+							<div class="label">{CAPTURE_CUSTOM_2_REQ}{CAPTURE_CUSTOM_2_Q}</div>
+							<div class="col">
+								<input   name="capture_custom_2" type=text   id="c_custom_2" value="{CAPTURE_CUSTOM_2_A}" class="{RESPONSIVE_ERROR_052}"  onKeyUp="toggle_field2('c_custom_2')" />
+							  <span class="msg">{RESPONSIVE_ERRORTEXT_052}</span>
+							</div>
+							<div class="clear"></div>
+						</div>			
+                        
+                         <div class="field field_custom" id="capture_custom_3">
+							<div class="label">{CAPTURE_CUSTOM_3_REQ}{CAPTURE_CUSTOM_3_Q}</div>
+							<div class="col">
+								<input   name="capture_custom_3" type=text   id="c_custom_3" value="{CAPTURE_CUSTOM_3_A}" class="{RESPONSIVE_ERROR_053}" onKeyUp="toggle_field2('c_custom_3')" />
+							<span class="msg">{RESPONSIVE_ERRORTEXT_053}</span>
+							</div>
+							<div class="clear"></div>
+						</div>			
+                        
+                         <div class="field field_custom" id="capture_custom_4">
+							<div class="label">{CAPTURE_CUSTOM_4_REQ}{CAPTURE_CUSTOM_4_Q}</div>
+							<div class="col">
+								<input   name="capture_custom_4" type=text   id="c_custom_4" value="{CAPTURE_CUSTOM_4_A}" class="{RESPONSIVE_ERROR_054}" onKeyUp="toggle_field2('c_custom_4')" />
+							  <span class="msg">{RESPONSIVE_ERRORTEXT_054}</span>
+							</div>
+							<div class="clear"></div>
+						</div>			
+                        
+                         <div class="field field_custom" id="capture_custom_5">
+							<div class="label">{CAPTURE_CUSTOM_5_REQ}{CAPTURE_CUSTOM_5_Q}</div>
+							<div class="col">
+								<input   name="capture_custom_5" type=text  id="c_custom_5" value="{CAPTURE_CUSTOM_5_A}" class="{RESPONSIVE_ERROR_055}" onKeyUp="toggle_field2('c_custom_5')" />
+							<span class="msg">{RESPONSIVE_ERRORTEXT_055}</span>
+							</div>
+							<div class="clear"></div>
+						</div>		
+          
+	<INPUT TYPE=HIDDEN NAME="ssl-login" VALUE="{PROTOCOL}">	  
+    <INPUT TYPE=HIDDEN NAME="chal" VALUE="{CHALLENGE}">
+   <INPUT TYPE=HIDDEN NAME="uamip" VALUE="{UAMIP}">
+   <INPUT TYPE=HIDDEN NAME="uamport" VALUE="{UAMPORT}">
+   <INPUT TYPE=HIDDEN NAME="nasid" VALUE="{NASID}">
+   <INPUT TYPE=HIDDEN NAME="mac" VALUE="{MAC}">
+   <INPUT TYPE=HIDDEN NAME="userurl" VALUE="{USERURL}">
+   <INPUT TYPE=HIDDEN NAME="login" VALUE="login">
+   <input name="skin_id" type="hidden" id="skin_id" value="{SKIN_ID}" />
+<input name="uid" type="hidden" value="{MAC}" />
+   <input name="pwd" type="hidden" value="{PWD}" />
+<input name="operator" type="hidden" id="operator" value="{OPERATOR}">
+<input name="location_id" type="hidden" id="location_id" value="{LOCATION_ID}">
+<input name="lang" type="hidden" id="location_id" value="{LANG}">
+
+  <span id="fb_thankyou" class="big">
+{LANG:fb_thankyou} {LANG:fb_login}<BR><BR>
+</span>
+
+ <div  id="capture_11" class="big" >
+         <p>   <input name="newsletter" type="checkbox" id="newsletter" value="1" {NEWSLETTER_DISABLED}> 
+    {LANG:newsletter} </p>    </div>
+
+<div  id="capture_12" class="big" >
+   <p>      <input name="agree" type="checkbox" id="agree" value="1"   {TERMS_DISABLED}> 
+       {USERAGREEMENT_ACCEPT} </p>  </div>
+
+
+<span id="fb_accept" class="big">
+<img src='customer_images/fb_logo.png'   />{LANG:fb_like}
+</span>
+
+    <div class="btn_container">  <a href="#" class="button1 submit">{SUBMITBUTTON}</a>	 </div>
+   <br>
+  
+   <p id="capture_note">
+    <span  >{LANG:required}  </span> 
+  </p>
+  
+   
+      <p class="big">{ERROR}</p>
+      <p><span id="error_1_2" class="enable_popup" >{LANG:enable_popup}</span></p>                    
+  	 
+  </FORM>
+  
+   </div> </div>  </div> </div> <BR><BR>
+   <script src="/customer/responsive/js/requiredhandler.js"></script>
+   
+  <!-- <script> var mailgun_dym="{LANG:didyoumean}"; </script> 
+    <script src="/scripts/mailgun/mailgun_check.js"> </script>  -->
+     
+    <script src="/customer/responsive/js/errortop.js"></script>  
+  
+   
