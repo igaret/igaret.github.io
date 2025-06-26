@@ -1,0 +1,16 @@
+[
+  {
+    "project_id": "",
+    "project_name": "",
+    "repo_version": "",
+    "source_url": "",
+    "apk_url": ""
+  },
+  {
+    "project_id": "dev.garet.autodebugtoggle",
+    "project_name": "Auto Debug Toggler",
+    "repo_version": "0.0.1",
+    "source_url": "https://raw.githubusercontent.com/igaret/tasker/auto_debug_toggler/source.zip",
+    "apk_url": "https://raw.githubusercontent.com/igaret/tasker/auto_debug_toggler/release_0.0.1.apk"
+  }
+]
