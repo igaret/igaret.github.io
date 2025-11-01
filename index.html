@@ -1,122 +1,316 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>igaret github</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        pre {
-            background-color: #f0f0f0;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-        }
-        code {
-            background-color: #f0f0f0;
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-        .step {
-            background-color: white;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .note {
-            background-color: #fffde7;
-            padding: 10px;
-            border-left: 4px solid #ffd600;
-            margin: 10px 0;
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DoH Resolver — Browser Only</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+:root{
+  --bg:#0b0f14; --panel:#0f1620; --muted:#aab3bf; --accent:#7dd3fc; --glass: rgba(255,255,255,0.03);
+  --success:#16a34a; --danger:#ef4444; --mono:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:linear-gradient(180deg,#071019 0%,#08121a 100%);
+  color:#e6eef6;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  display:flex;align-items:flex-start;justify-content:center;padding:40px;
+}
+.container{
+  width:980px; max-width:96vw; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:12px; padding:22px; box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+  border:1px solid rgba(255,255,255,0.03);
+}
+.header{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+.logo{
+  width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#072a3b,#052b2f);
+  display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);
+  font-family:var(--mono);font-size:18px;box-shadow:inset 0 -6px 30px rgba(0,0,0,0.5);
+}
+.h1{font-size:18px;margin:0}
+.lead{color:var(--muted);font-size:13px;margin-top:4px}
+.grid{display:grid;grid-template-columns:1fr 380px;gap:18px;margin-top:14px}
+.card{background:var(--panel);border-radius:10px;padding:14px;border:1px solid rgba(255,255,255,0.02)}
+.controls{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:8px;align-items:center}
+.input,select,button,textarea{
+  background:var(--glass); color:inherit; border:1px solid rgba(255,255,255,0.04); padding:10px;border-radius:8px;font-size:14px;
+}
+.input{flex:1}
+.small{font-size:13px;color:var(--muted)}
+.btn{
+  background:linear-gradient(180deg,var(--accent),#34c8ff); color:#04202a;border:0;padding:10px 12px;border-radius:10px;font-weight:600;
+  cursor:pointer;
+}
+.btn:active{transform:translateY(1px)}
+.result-area{display:flex;flex-direction:column;gap:8px}
+.json-out{background:#071826;border-radius:8px;padding:10px;overflow:auto;max-height:380px;font-family:var(--mono);font-size:13px;color:#cfeffb;border:1px solid rgba(255,255,255,0.02)}
+.meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px}
+.footer{margin-top:12px;color:var(--muted);font-size:13px}
+.small-note{color:var(--muted);font-size:12px}
+.badge{padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.02);font-size:12px}
+.switch-row{display:flex;gap:8px;align-items:center}
+.provider-list{display:flex;flex-direction:column;gap:6px}
+.provider-item{display:flex;gap:8px;align-items:center}
+.provider-item input{accent-color:var(--accent)}
+.copy-btn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:6px 8px;border-radius:8px;cursor:pointer}
+.status{font-weight:700}
+</style>
 </head>
 <body>
-    <h2><a href="https://github.com/termux/termux-app" target="new">Termux</a> <a href="https://technitium.com/dns" target="new">Technitium DNS Server</a></h2><br><h1> setup guide</h1>
-    <div class="step">
-    <div class="note">
-        <strong>Note:</strong> You must have root access to complete this installation.
-	<br>
-	<strong>Advisory:</strong> I <b>strongly</b> advise you follow the guide to undetstand what this <a href="https://raw.githubusercontent.com/igaret/igaret.github.io/refs/heads/main/sh/auto-install-script.sh" target="new">auto-install-script</a> is doing.
-<br>
-<i>to utilize this auto-install-script.sh:</i>
-	<br>
-        <pre>
-	<code>
-curl -sL https://raw.githubusercontent.com/igaret/igaret.github.io/refs/heads/main/sh/auto-install-script.sh | sudo bash</code>
-	</pre>
-</div>
-</div>
-    <div class="step">
-        <h2>Step 1: Install Required Packages</h2>
-        <p>First, install all the necessary dependencies by running the following command:</p>
-        <pre><code>yes | apt install dotnet-runtime-8.0 dotnet-host dotnet-apphost dotnet-apphost-pack-8.0 dotnet-sdk-8.0 wget tsu -y</code></pre>
+  <div class="container" role="main">
+    <div class="header">
+      <div class="logo">DoH</div>
+      <div>
+        <h1 class="h1">Browser DoH Resolver</h1>
+        <div class="lead">Resolve hostnames from the browser with DNS-over-HTTPS. Works on GitHub Pages; no backend required for browser-only usage.</div>
+      </div>
     </div>
-    
-    <div class="step">
-        <h2>Step 2: Download Technitium DNS Server</h2>
-        <p>Download the Technitium DNS Server portable package:</p>
-        <pre><code>wget https://download.technitium.com/dns/DnsServerPortable.tar.gz -o dns.tar.gz</code></pre>
+
+    <div class="grid">
+      <div class="card">
+        <div class="controls">
+          <div class="row">
+            <input id="qname" class="input" placeholder="example.com" value="example.com" />
+            <select id="qtype" class="input" style="max-width:120px">
+              <option value="A">A</option>
+              <option value="AAAA">AAAA</option>
+              <option value="CNAME">CNAME</option>
+              <option value="MX">MX</option>
+              <option value="TXT">TXT</option>
+              <option value="ANY">ANY</option>
+            </select>
+            <button id="resolve" class="btn">Resolve</button>
+          </div>
+
+          <div class="row small">
+            <div style="flex:1">
+              <div class="small-note">Provider</div>
+              <select id="provider" class="input" aria-label="DoH provider">
+                <option value="https://cloudflare-dns.com/dns-query">Cloudflare (application/dns-json)</option>
+                <option value="https://dns.google/resolve">Google (application/dns-json)</option>
+                <option value="https://dns.quad9.net/dns-query">Quad9 (application/dns-json)</option>
+                <option value="custom">Custom endpoint...</option>
+              </select>
+            </div>
+            <div style="width:220px">
+              <div class="small-note">Custom endpoint (if selected)</div>
+              <input id="customEndpoint" class="input" placeholder="https://your-doh.example/dns-query" />
+            </div>
+          </div>
+
+          <div class="row small">
+            <label class="small-note" style="width:130px">Format</label>
+            <div class="switch-row">
+              <label><input type="radio" name="format" value="json" checked /> JSON (application/dns-json)</label>
+              <label style="margin-left:12px"><input type="radio" name="format" value="wire" /> Wire (application/dns-message)</label>
+            </div>
+          </div>
+
+          <div class="row small">
+            <label class="small-note" style="width:130px">Options</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <label class="small-note"><input id="useGET" type="checkbox" /> Use GET for JSON endpoints</label>
+              <label style="margin-left:12px" class="small-note"><input id="includeRaw" type="checkbox" checked/> Show raw base64</label>
+            </div>
+          </div>
+
+          <div class="row small">
+            <div class="meta">
+              <div class="badge">No network access required from server — uses browser fetch</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="small-note">Results</div>
+            <div class="meta"><span id="latency" class="small-note">—</span></div>
+          </div>
+
+          <div class="result-area">
+            <div id="resultJson" class="json-out" aria-live="polite">No query yet.</div>
+            <div style="display:flex;gap:6px;justify-content:flex-end">
+              <button id="copyJson" class="copy-btn">Copy JSON</button>
+              <button id="downloadRaw" class="copy-btn">Download raw</button>
+            </div>
+          </div>
+
+          <div class="footer">
+            <div class="small-note">Tip: If a provider requires special headers (CORS), a custom gateway may be needed. Use a serverless function (optional) if CORS blocks direct fetches.</div>
+          </div>
+        </div>
+      </div>
     </div>
-    
-    <div class="step">
-        <h2>Step 3: Prepare Installation Directory</h2>
-        <p>Create a directory for DNS server and move the downloaded file:</p>
-        <pre><code>mkdir dns
-mv dns.tar.gz dns/
-cd dns</code></pre>
-    </div>
-    
-    <div class="step">
-        <h2>Step 4: Extract the Package</h2>
-        <p>Uncompress the downloaded package:</p>
-        <pre><code>gunzip --uncompress dns.tar.gz</code></pre>
-    </div>
-    
-    <div class="step">
-        <h2>Step 5: Set Up System Directory</h2>
-        <p>Create the system directory for Technitium and copy the files:</p>
-        <pre><code>sudo mkdir $PREFIX/opt/technitium
-sudo cp -r dns $PREFIX/opt/technitium/</code></pre>
-    </div>
-    
-    <div class="step">
-        <h2>Step 6: Create Service Link</h2>
-        <p>Create a symbolic link for the service:</p>
-        <pre><code>sudo ln -sf /data/data/com.termux/files/usr/opt/technitium/dns/start.sh /data/data/com.termux/files/usr/bin/svc-technitium-start</code></pre>
-    </div>
-    
-    <div class="step">
-        <h2>Step 7: Create Startup Script</h2>
-        <p>Create the startup script for the DNS service:</p>
-        <pre>
-            <code>
-echo \#\!/bin/sh > /data/data/com.termux/files/usr/opt/technitium/dns/start.sh
-echo /data/data/com.termux/files/usr/bin/dotnet /data/data/com.termux/files/usr/opt/technitium/dns/DnsServerApp.dll >> /data/data/com.termux/files/usr/opt/technitium/dns/start.sh
-</code></pre>
-    </div>
-    
-    <div class="step">
-        <h2>Step 8: Running the DNS Server</h2>
-        <p>To start the Technitium DNS Server, run:</p>
-        <pre><code>sudo svc-technitium-start</code></pre>
-    </div>
-    
-    <div class="note">
-        <strong>Tip:</strong> After installation, you can access the web-based administration panel at <code>http://localhost:5380</code> if running locally.
-    </div>
+  </div>
+
+<script>
+/*
+  Browser DoH Resolver
+  - Supports application/dns-json endpoints (Cloudflare/Google/Quad9)
+  - Supports application/dns-message (wire) when provider supports POST
+  - Optional custom endpoint can be used (for CORS or custom gateway)
+*/
+const resolveBtn = document.getElementById('resolve');
+const qname = document.getElementById('qname');
+const qtype = document.getElementById('qtype');
+const providerSelect = document.getElementById('provider');
+const customEndpoint = document.getElementById('customEndpoint');
+const resultJson = document.getElementById('resultJson');
+const latencyEl = document.getElementById('latency');
+const copyJson = document.getElementById('copyJson');
+const downloadRaw = document.getElementById('downloadRaw');
+
+function setResult(text, raw=false){
+  resultJson.textContent = text;
+}
+
+// helpers
+function isoNow(){ return performance && performance.now ? performance.now() : Date.now(); }
+
+async function dohJsonGet(url, name, type){
+  // append query params for application/dns-json endpoints (Google/Cloudflare)
+  const u = new URL(url);
+  u.searchParams.set('name', name);
+  u.searchParams.set('type', type);
+  const res = await fetch(u.toString(), { method: 'GET', headers: { 'Accept': 'application/dns-json' }});
+  return res;
+}
+
+async function dohJsonPost(url, name, type){
+  const body = JSON.stringify({ name, type });
+  const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept':'application/dns-json' }, body });
+  return res;
+}
+
+function encodeNameWire(name){
+  // Very small helper to craft a minimal DNS question in wire format for A/AAAA/CNAME/MX/TXT types.
+  // For full compatibility and edge cases use a proper DNS library; this is a minimal impl.
+  function labelBytes(lbl){
+    const enc = new TextEncoder();
+    return new Uint8Array([lbl.length, ...enc.encode(lbl)]);
+  }
+  const parts = name.split('.');
+  const labels = parts.map(labelBytes);
+  let qlen = labels.reduce((s,l) => s + l.length, 0) + 1; // +1 for null root
+  const nameBuf = new Uint8Array(qlen);
+  let offset = 0;
+  labels.forEach(l => { nameBuf.set(l, offset); offset += l.length; });
+  nameBuf[offset++] = 0; // root
+  // build header + question: id(2) flags(2)QDcount(2)ANcount(2)NS(2)AR(2)
+  const buf = new ArrayBuffer(12 + nameBuf.length + 4);
+  const view = new DataView(buf);
+  const u8 = new Uint8Array(buf);
+  view.setUint16(0, Math.floor(Math.random()*0xffff), false); // id
+  view.setUint16(2, 0x0100, false); // standard query, recursion desired
+  view.setUint16(4, 1, false); // QDCOUNT
+  view.setUint16(6, 0, false); // ANCOUNT
+  view.setUint16(8, 0, false); // NSCOUNT
+  view.setUint16(10,0, false); // ARCOUNT
+  u8.set(nameBuf, 12);
+  // qtype
+  const typeMap = { A:1, AAAA:28, CNAME:5, MX:15, TXT:16, ANY:255 };
+  view.setUint16(12 + nameBuf.length, typeMap[type] || 1, false);
+  // qclass IN
+  view.setUint16(12 + nameBuf.length + 2, 1, false);
+  return new Uint8Array(buf);
+}
+
+async function dohWirePost(url, qnameVal, qtypeVal){
+  const qwire = encodeNameWire(qnameVal, qtypeVal);
+  const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/dns-message', 'Accept': 'application/dns-message' }, body: qwire });
+  return res;
+}
+
+async function runQuery(){
+  const name = qname.value.trim();
+  if(!name){ setResult('Please enter a hostname'); return; }
+  const type = qtype.value;
+  const provider = providerSelect.value === 'custom' ? (customEndpoint.value.trim() || '') : providerSelect.value;
+  if(!provider){ setResult('No provider selected'); return; }
+
+  const fmt = document.querySelector('input[name="format"]:checked').value;
+  const useGET = document.getElementById('useGET').checked;
+  const includeRaw = document.getElementById('includeRaw').checked;
+
+  setResult('Querying\u2026');
+  latencyEl.textContent = '…';
+  const t0 = isoNow();
+
+  try{
+    let response, text, rawBytes;
+    if(fmt === 'json'){
+      if(useGET){
+        response = await dohJsonGet(provider, name, type);
+      } else {
+        // POST with JSON body when supported (Google/Cloudflare accept GET; some accept JSON POST)
+        response = await dohJsonPost(provider, name, type);
+      }
+      const t1 = isoNow();
+      latencyEl.textContent = Math.round(t1 - t0) + ' ms';
+      if(!response.ok) {
+        setResult('HTTP error ' + response.status + ' — ' + response.statusText);
+        return;
+      }
+      const j = await response.json();
+      let out = JSON.stringify(j, null, 2);
+      if(includeRaw && j.Answer){
+        out += '\n\n--- Parsed Answers ---\n';
+        j.Answer.forEach(a=>{
+          out += `${a.name} ${a.type} ${a.TTL} ${a.data}\n`;
+        });
+      }
+      setResult(out);
+      // store raw bytes if available (not for JSON)
+      rawBytes = null;
+    } else {
+      // wire format
+      response = await dohWirePost(provider, name, type);
+      const t1 = isoNow();
+      latencyEl.textContent = Math.round(t1 - t0) + ' ms';
+      if(!response.ok){
+        setResult('HTTP error ' + response.status + ' — ' + response.statusText);
+        return;
+      }
+      const ab = await response.arrayBuffer();
+      rawBytes = new Uint8Array(ab);
+      // show a brief hexdump and base64
+      const b64 = btoa(String.fromCharCode(...rawBytes));
+      setResult('Wire response base64 (truncated):\n' + b64.slice(0,240) + (b64.length>240 ? '…' : ''));
+    }
+
+    // attach raw data to download button
+    downloadRaw.onclick = () => {
+      if(!rawBytes){ alert('No raw wire bytes available for JSON responses'); return; }
+      const blob = new Blob([rawBytes], { type: 'application/dns-message' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `${name}.${type}.dnsmsg`;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    };
+
+    copyJson.onclick = () => {
+      navigator.clipboard && navigator.clipboard.writeText(resultJson.textContent).then(()=>{}, ()=>{ alert('Copy failed'); });
+    };
+
+  }catch(err){
+    latencyEl.textContent = '—';
+    setResult('Error: ' + err.message);
+  }
+}
+
+resolveBtn.addEventListener('click', runQuery);
+qname.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') runQuery(); });
+
+providerSelect.addEventListener('change', ()=>{
+  if(providerSelect.value === 'custom'){ customEndpoint.focus(); }
+});
+</script>
 </body>
 </html>
