@@ -10,27 +10,27 @@
   </style>
 </head>
 <body>
-  <div class="output" id="output"></div>
+  <h1>DNS-over-HTTPS Query</h1>
+  <p>This page parses the URL fragment and performs a DNS query using Google's DoH API.</p>
+  <div class="output" id="output">Waiting for fragment...</div>
 
   <script>
     async function parseAndQueryDNS() {
       const fragment = window.location.hash.substring(1);
       const params = new URLSearchParams(fragment);
       const output = document.getElementById('output');
-const mimetype = params.get('mimetype') || 'json';
-const humanReadable = params.get('human-readable') === '1';
 
-
-      if (!params.has('resolve')) {
-        output.textContent = 'resolve required.';
+      if (!params.has('dns-query')) {
+        output.textContent = 'No dns-query modifier found.';
         return;
       }
 
-      const domain = params.get('name');
+      const domain = params.get('domain');
       const type = params.get('type') || 'A';
+      const mimetype = params.get('mimetype') || 'json';
 
       if (!domain) {
-        output.textContent = 'resolve?name=example.org';
+        output.textContent = 'Missing domain parameter.';
         return;
       }
 
@@ -43,18 +43,11 @@ const humanReadable = params.get('human-readable') === '1';
 
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-        if (humanReadable && data.Answer) {
-          let result = `<b>domain:</b> ${domain}(${type}):`;
-          for (const record of data.Answer) {
-            result += `${record.data}<br>ttl: ${record.TTL}`;
-          }
-          result += '<br>';
-          output.innerHTML = result;
-        } else {
-          output.innerHTML = `<strong>Raw JSON reply:${JSON.stringify(data, null, 2)}`;
-        }
+        const data = mimetype === 'json' ? await res.json() : await res.arrayBuffer();
+
+        output.innerHTML = `<strong>Query Result:</strong><pre>${mimetype === 'json' ? JSON.stringify(data, null, 2) : '[Binary response received]'}</pre>`;
       } catch (err) {
-        output.textContent = `error: ${err.message}`;
+        output.textContent = `Error: ${err.message}`;
       }
     }
 
