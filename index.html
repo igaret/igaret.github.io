@@ -1,96 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>DNS-over-HTTPS Query</title>
-  <style>
-    body { font-family: sans-serif; padding: 2em; }
-    .output { margin-top: 1em; padding: 1em; background: #f0f0f0; border-radius: 5px; }
-    code { background: #e0e0e0; padding: 2px 4px; border-radius: 3px; }
-    h2 { margin-top: 1.5em; }
-  </style>
 </head>
 <body>
-  <h1>DNS-over-HTTPS Query Tool</h1>
-  <p>This page parses the URL fragment and performs DNS queries using Google's DoH API.</p>
-  <div class="output" id="output">Waiting for fragment...</div>
+  <b><u><i>DNS-over-HTTPS Query Tool</i></u></b><br>
+  This page parses <code>?query=</code> parameters and performs DNS queries using Google's DoH API.<br><br>
+  <div id="output">Waiting for query...</div>
 
   <script>
     async function queryDNS(domain, type, mimetype) {
-      const url = `https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=${encodeURIComponent(type)}`;
+      const url = "https://dns.google/resolve?name=" + encodeURIComponent(domain) + "&type=" + encodeURIComponent(type);
       const res = await fetch(url, {
         headers: { 'Accept': mimetype === 'json' ? 'application/dns-json' : 'application/dns-message' }
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) throw new Error("HTTP " + res.status);
       return mimetype === 'json' ? await res.json() : await res.arrayBuffer();
     }
 
-    function isCurlRequest() {
-      const ua = navigator.userAgent || '';
-      return ua.toLowerCase().includes('curl');
-    }
-
     async function parseAndQueryDNS() {
-      const fragment = window.location.hash.substring(1);
-      const params = new URLSearchParams(fragment);
-      const output = document.getElementById('output');
+      const params = new URLSearchParams(window.location.search);
+      const output = document.getElementById("output");
 
-      if (!params.has('domain')) {
-        output.textContent = 'Missing domain parameter.';
+      if (params.get("query") !== "dns-query") {
+        output.textContent = "Missing or invalid query parameter.";
         return;
       }
 
-      const domain = params.get('domain');
-      const types = (params.get('type') || 'A').split('+').map(t => t.trim().toUpperCase());
-      const mimetype = params.get('mimetype') || 'json';
-      const humanReadable = params.get('human-readable') === '1';
-      const wildcard = params.get('wildcard') === '1';
-      const subdomains = wildcard ? ['www', 'mail', 'test', 'foo', 'bar'] : [''];
+      const domain = params.get("domain");
+      if (!domain) {
+        output.textContent = "Missing domain parameter.";
+        return;
+      }
 
-      let ipList = [];
+      const types = (params.get("type") || "A").split("+").map(t => t.trim().toUpperCase());
+      const mimetype = params.get("mimetype") || "json";
+      const humanReadable = params.get("human-readable") === "1";
+      const wildcard = params.get("wildcard") === "1";
+      const subdomains = wildcard ? ["www", "mail", "test", "foo", "bar"] : [""];
+
+      let result = "";
+      result += "<b>Querying DNS records for:</b> " + domain + "<br>";
+      result += "<i>Types:</i> " + types.join(", ") + "<br>";
+      result += "<i>Wildcard:</i> " + (wildcard ? "enabled" : "disabled") + "<br><br>";
 
       for (const sub of subdomains) {
-        const fqdn = sub ? `${sub}.${domain}` : domain;
+        const fqdn = sub ? sub + "." + domain : domain;
+        result += "<u>" + fqdn + "</u><br>";
         for (const type of types) {
           try {
             const data = await queryDNS(fqdn, type, mimetype);
 
-            if (mimetype !== 'json') continue;
-            if (!data.Answer) continue;
-
-            for (const record of data.Answer) {
-              if (type === 'A' || type === 'AAAA') {
-                ipList.push(record.data);
-              }
+            if (mimetype !== "json") {
+              result += "<b>" + type + ":</b> Binary response received.<br>";
+              continue;
             }
 
-            if (!isCurlRequest()) {
-              const label = `<h2>${fqdn}</h2><strong>${type} Records:</strong>`;
-              if (humanReadable) {
-                output.innerHTML += `${label}<ul>`;
-                for (const record of data.Answer) {
-                  output.innerHTML += `<li><strong>Data:</strong> ${record.data} <br><strong>TTL:</strong> ${record.TTL} seconds</li>`;
-                }
-                output.innerHTML += '</ul>';
-              } else {
-                output.innerHTML += `${label}<pre>${JSON.stringify(data, null, 2)}</pre>`;
-              }
-            }
-          } catch (err) {
-            if (!isCurlRequest()) {
-              output.innerHTML += `<strong>${type} Error:</strong> ${err.message}<br>`;
-            }
-          }
-        }
-      }
-
-      if (isCurlRequest()) {
-        output.innerHTML = ipList.join('\n') || 'No IP records found.';
-      }
-    }
-
-    window.addEventListener('load', parseAndQueryDNS);
-    window.addEventListener('hashchange', parseAndQueryDNS);
-  </script>
-</body>
-</html>
+            if (humanReadable && data.Answer) {
+              result += "<b>" + type + " Records:</b><br>";
+</script>
