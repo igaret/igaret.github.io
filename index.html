@@ -2,11 +2,9 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>DNS-over-HTTPS Query</title>
+  <title>dns-query</title>
 </head>
 <body>
-  <b><u><i>DNS-over-HTTPS Query Tool</i></u></b><br>
-  This page parses <code>?query=</code> parameters and performs DNS queries using Google's DoH API.<br><br>
   <div id="output">Waiting for query...</div>
 
   <script>
@@ -24,49 +22,49 @@
       const output = document.getElementById("output");
 
       if (params.get("query") !== "dns-query") {
-        output.textContent = "Missing or invalid query parameter.";
+        output.textContent = "invalid query parameter.";
         return;
       }
 
       const domain = params.get("domain");
       if (!domain) {
-        output.textContent = "Missing domain parameter.";
+        output.textContent = "missing domain parameter.";
         return;
       }
 
       const types = (params.get("type") || "A").split("+").map(t => t.trim().toUpperCase());
       const humanReadable = params.get("human-readable") === "1";
       const wildcard = params.get("wildcard") === "1";
-      const subdomains = wildcard ? ["www", "mail", "test", "foo", "bar"] : [""];
+      const subdomains = wildcard ? ["www", "mail", "mx", "api", "wiki", "doc", "ftp", "ww2", "blog", "account"] : [""];
 
       let result = "";
-      result += "<b>Querying DNS records for:</b> " + domain + "<br>";
-      result += "<i>Types:</i> " + types.join(", ") + "<br>";
-      result += "<i>Wildcard:</i> " + (wildcard ? "enabled" : "disabled") + "<br><br>";
+      result += "<b>" + domain + "</b><br>";
+      result += "<i>types:</i> " + types.join(", ") + "<br>";
+      result += "<i>wildcard:</i> " + (wildcard ? "enabled" : "disabled") + "<br><br>";
 
       for (const sub of subdomains) {
         const fqdn = sub ? sub + "." + domain : domain;
-        result += "<u>" + fqdn + "</u><br>";
+        result += "<b>" + fqdn + "</b><br>";
         for (const type of types) {
           try {
             const data = await queryDNS(fqdn, type);
 
             if (!data.Answer) {
-              result += "<b>" + type + ":</b> No records found.<br>";
+              result += "<i>" + type + ":</i>  null<br>";
               continue;
             }
 
             if (humanReadable) {
-              result += "<b>" + type + " Records:</b><br>";
+              result += "<b>" + type + "</b><br>";
               for (const record of data.Answer) {
-                result += "Data: " + record.data + " | TTL: " + record.TTL + " seconds<br>";
+                result += "data: " + record.data + " <br>ttl: " + record.TTL + "s<br>";
               }
             } else {
-              result += "<b>" + type + " Raw JSON:</b><br>";
+              result += "<b>" + type + "raw: </b><br>";
               result += "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
             }
           } catch (err) {
-            result += "<b>" + type + " Error:</b> " + err.message + "<br>";
+            result += "<b>" + type + " error:</b> " + err.message + "<br>";
           }
         }
         result += "<br>";
