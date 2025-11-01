@@ -1,76 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>DNS-over-HTTPS Query</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; }
+    .output { margin-top: 1em; padding: 1em; background: #f0f0f0; border-radius: 5px; }
+    code { background: #e0e0e0; padding: 2px 4px; border-radius: 3px; }
+  </style>
 </head>
 <body>
-  <b><u><i>DNS-over-HTTPS Query Tool</i></u></b><br>
-  This page parses <code>?resolve=</code> parameters and performs DNS queries using Google's DoH API.<br><br>
-  <div id="output">Waiting for query...</div>
+  <div class="output" id="output"></div>
 
   <script>
-    async function queryDNS(domain, type) {
-      const url = "https://dns.google/resolve?name=" + encodeURIComponent(domain) + "&type=" + encodeURIComponent(type);
-      const res = await fetch(url, {
-        headers: { 'Accept': 'application/dns-json' }
-      });
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return await res.json();
-    }
-
     async function parseAndQueryDNS() {
-      const params = new URLSearchParams(window.location.search);
-      const output = document.getElementById("output");
+      const fragment = window.location.hash.substring(1);
+      const params = new URLSearchParams(fragment);
+      const output = document.getElementById('output');
 
-      const domain = params.get("name");
-      if (!domain) {
-        output.textContent = "Missing 'name' parameter.";
+      if (!params.has('dns-query')) {
+        output.textContent = 'dns-query required.';
         return;
       }
 
-      const types = (params.get("type") || "A").split("+").map(t => t.trim().toUpperCase());
-      const humanReadable = params.get("human-readable") === "1";
-      const wildcard = params.get("wildcard") === "1";
-      const subdomains = wildcard ? ["www", "mail", "test", "foo", "bar"] : [""];
+      const domain = params.get('domain');
+      const type = params.get('type') || 'A';
+      const mimetype = params.get('mimetype') || 'json';
+      const humanReadable = params.get('human-readable') === '1';
 
-      let result = "";
-      result += "<b>Querying DNS records for:</b> " + domain + "<br>";
-      result += "<i>Types:</i> " + types.join(", ") + "<br>";
-      result += "<i>Wildcard:</i> " + (wildcard ? "enabled" : "disabled") + "<br><br>";
-
-      for (const sub of subdomains) {
-        const fqdn = sub ? sub + "." + domain : domain;
-        result += "<u>" + fqdn + "</u><br>";
-        for (const type of types) {
-          try {
-            const data = await queryDNS(fqdn, type);
-
-            if (!data.Answer) {
-              result += "<b>" + type + ":</b> No records found.<br>";
-              continue;
-            }
-
-            if (humanReadable) {
-              result += "<b>" + type + " Records:</b><br>";
-              for (const record of data.Answer) {
-                result += "Data: " + record.data + " | TTL: " + record.TTL + " seconds<br>";
-              }
-            } else {
-              result += "<b>" + type + " Raw JSON:</b><br>";
-              result += "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
-            }
-          } catch (err) {
-            result += "<b>" + type + " Error:</b> " + err.message + "<br>";
-          }
-        }
-        result += "<br>";
+      if (!domain) {
+        output.textContent = 'Missing domain parameter.';
+        return;
       }
 
-      output.innerHTML = result;
+      const url = `https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=${encodeURIComponent(type)}`;
+
+      try {
+        const res = await fetch(url, {
+          headers: { 'Accept': mimetype === 'json' ? 'application/dns-json' : 'application/dns-message' }
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        if (humanReadable && data.Answer) {
+          let result = `<b>domain:</b> ${domain}(${type}):`;
+          for (const record of data.Answer) {
+            result += `${record.data}<br>ttl: ${record.TTL}`;
+          }
+          result += '<br>';
+          output.innerHTML = result;
+        } else {
+          output.innerHTML = `<strong>Raw JSON reply:${JSON.stringify(data, null, 2)}`;
+        }
+      } catch (err) {
+        output.textContent = `error: ${err.message}`;
+      }
     }
 
-    window.addEventListener("load", parseAndQueryDNS);
+    window.addEventListener('load', parseAndQueryDNS);
+    window.addEventListener('hashchange', parseAndQueryDNS);
   </script>
 </body>
 </html>
