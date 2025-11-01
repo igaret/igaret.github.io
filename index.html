@@ -18,18 +18,16 @@
       const params = new URLSearchParams(fragment);
       const output = document.getElementById('output');
 
-      if (!params.has('dns-query')) {
-        output.textContent = 'dns-query required.';
+      if (!params.has('resolve')) {
+        output.textContent = 'resolve required.';
         return;
       }
 
-      const domain = params.get('domain');
+      const domain = params.get('name');
       const type = params.get('type') || 'A';
-      const mimetype = params.get('mimetype') || 'json';
-      const humanReadable = params.get('human-readable') === '1';
 
       if (!domain) {
-        output.textContent = 'Missing domain parameter.';
+        output.textContent = 'resolve?name=example.org';
         return;
       }
 
