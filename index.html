@@ -18,7 +18,7 @@
       const params = new URLSearchParams(fragment);
       const output = document.getElementById('output');
 const mimetype = params.get('mimetype') || 'json';
-
+const humanReadable = params.get('human-readable') === '1';
 
 
       if (!params.has('resolve')) {
