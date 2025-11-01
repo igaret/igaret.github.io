@@ -10,13 +10,13 @@
   <div id="output">Waiting for query...</div>
 
   <script>
-    async function queryDNS(domain, type, mimetype) {
+    async function queryDNS(domain, type) {
       const url = "https://dns.google/resolve?name=" + encodeURIComponent(domain) + "&type=" + encodeURIComponent(type);
       const res = await fetch(url, {
-        headers: { 'Accept': mimetype === 'json' ? 'application/dns-json' : 'application/dns-message' }
+        headers: { 'Accept': 'application/dns-json' }
       });
       if (!res.ok) throw new Error("HTTP " + res.status);
-      return mimetype === 'json' ? await res.json() : await res.arrayBuffer();
+      return await res.json();
     }
 
     async function parseAndQueryDNS() {
@@ -35,7 +35,6 @@
       }
 
       const types = (params.get("type") || "A").split("+").map(t => t.trim().toUpperCase());
-      const mimetype = params.get("mimetype") || "json";
       const humanReadable = params.get("human-readable") === "1";
       const wildcard = params.get("wildcard") === "1";
       const subdomains = wildcard ? ["www", "mail", "test", "foo", "bar"] : [""];
@@ -50,13 +49,33 @@
         result += "<u>" + fqdn + "</u><br>";
         for (const type of types) {
           try {
-            const data = await queryDNS(fqdn, type, mimetype);
+            const data = await queryDNS(fqdn, type);
 
-            if (mimetype !== "json") {
-              result += "<b>" + type + ":</b> Binary response received.<br>";
+            if (!data.Answer) {
+              result += "<b>" + type + ":</b> No records found.<br>";
               continue;
             }
 
-            if (humanReadable && data.Answer) {
+            if (humanReadable) {
               result += "<b>" + type + " Records:</b><br>";
-</script>
+              for (const record of data.Answer) {
+                result += "Data: " + record.data + " | TTL: " + record.TTL + " seconds<br>";
+              }
+            } else {
+              result += "<b>" + type + " Raw JSON:</b><br>";
+              result += "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+            }
+          } catch (err) {
+            result += "<b>" + type + " Error:</b> " + err.message + "<br>";
+          }
+        }
+        result += "<br>";
+      }
+
+      output.innerHTML = result;
+    }
+
+    window.addEventListener("load", parseAndQueryDNS);
+  </script>
+</body>
+</html>
