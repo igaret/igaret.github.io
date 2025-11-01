@@ -21,10 +21,13 @@
       const params = new URLSearchParams(window.location.search);
       const output = document.getElementById("output");
 
+<!--
       if (params.get("query") !== "dns-query") {
         output.textContent = "invalid query parameter.";
         return;
       }
+/-->
+
 
       const domain = params.get("domain");
       if (!domain) {
