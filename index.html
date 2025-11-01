@@ -2,9 +2,11 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>dns-query</title>
+  <title>DNS-over-HTTPS Query</title>
 </head>
 <body>
+  <b><u><i>DNS-over-HTTPS Query Tool</i></u></b><br>
+  This page parses <code>?resolve=</code> parameters and performs DNS queries using Google's DoH API.<br><br>
   <div id="output">Waiting for query...</div>
 
   <script>
@@ -21,53 +23,45 @@
       const params = new URLSearchParams(window.location.search);
       const output = document.getElementById("output");
 
-<!--
-      if (params.get("query") !== "dns-query") {
-        output.textContent = "invalid query parameter.";
-        return;
-      }
-/-->
-
-
-      const domain = params.get("domain");
+      const domain = params.get("name");
       if (!domain) {
-        output.textContent = "missing domain parameter.";
+        output.textContent = "Missing 'name' parameter.";
         return;
       }
 
       const types = (params.get("type") || "A").split("+").map(t => t.trim().toUpperCase());
       const humanReadable = params.get("human-readable") === "1";
       const wildcard = params.get("wildcard") === "1";
-      const subdomains = wildcard ? ["www", "mail", "mx", "api", "wiki", "doc", "ftp", "ww2", "blog", "account"] : [""];
+      const subdomains = wildcard ? ["www", "mail", "test", "foo", "bar"] : [""];
 
       let result = "";
-      result += "<b>" + domain + "</b><br>";
-      result += "<i>types:</i> " + types.join(", ") + "<br>";
-      result += "<i>wildcard:</i> " + (wildcard ? "enabled" : "disabled") + "<br><br>";
+      result += "<b>Querying DNS records for:</b> " + domain + "<br>";
+      result += "<i>Types:</i> " + types.join(", ") + "<br>";
+      result += "<i>Wildcard:</i> " + (wildcard ? "enabled" : "disabled") + "<br><br>";
 
       for (const sub of subdomains) {
         const fqdn = sub ? sub + "." + domain : domain;
-        result += "<b>" + fqdn + "</b><br>";
+        result += "<u>" + fqdn + "</u><br>";
         for (const type of types) {
           try {
             const data = await queryDNS(fqdn, type);
 
             if (!data.Answer) {
-              result += "<i>" + type + ":</i>  null<br>";
+              result += "<b>" + type + ":</b> No records found.<br>";
               continue;
             }
 
             if (humanReadable) {
-              result += "<b>" + type + "</b><br>";
+              result += "<b>" + type + " Records:</b><br>";
               for (const record of data.Answer) {
-                result += "data: " + record.data + " <br>ttl: " + record.TTL + "s<br>";
+                result += "Data: " + record.data + " | TTL: " + record.TTL + " seconds<br>";
               }
             } else {
-              result += "<b>" + type + "raw: </b><br>";
+              result += "<b>" + type + " Raw JSON:</b><br>";
               result += "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
             }
           } catch (err) {
-            result += "<b>" + type + " error:</b> " + err.message + "<br>";
+            result += "<b>" + type + " Error:</b> " + err.message + "<br>";
           }
         }
         result += "<br>";
