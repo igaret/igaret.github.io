@@ -17,6 +17,9 @@
       const fragment = window.location.hash.substring(1);
       const params = new URLSearchParams(fragment);
       const output = document.getElementById('output');
+const mimetype = params.get('mimetype') || 'json';
+
+
 
       if (!params.has('resolve')) {
         output.textContent = 'resolve required.';
