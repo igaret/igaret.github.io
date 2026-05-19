@@ -4,99 +4,258 @@
 <meta charset="UTF-8">
 <title>igaret — Portfolio</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
-    body {
-        margin: 0;
-        font-family: system-ui, sans-serif;
-        background: #f5f5f5;
-        color: #222;
-    }
+:root {
+    --bg: #e5e5e5;
+    --fg: #222;
+    --accent: #0078d7;
+    --tile-bg: #0078d7;
+    --tile-fg: #fff;
+    --header-bg: #0078d7;
+    --header-fg: #fff;
+    --flyout-bg: #1f1f1f;
+    --flyout-fg: #fff;
+    --tab-bg: #f0f0f0;
+    --tab-border: #ddd;
+}
 
-    header {
-        background: #111;
-        color: white;
-        padding: 80px 40px;
-        text-align: center;
-    }
+[data-theme="dark"] {
+    --bg: #1e1e1e;
+    --fg: #ddd;
+    --accent: #2899f5;
+    --tile-bg: #2899f5;
+    --tile-fg: #000;
+    --header-bg: #111;
+    --header-fg: #fff;
+    --flyout-bg: #111;
+    --flyout-fg: #eee;
+    --tab-bg: #2a2a2a;
+    --tab-border: #444;
+}
 
-    header h1 {
-        font-size: 3rem;
-        margin: 0;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    header p {
-        font-size: 1.2rem;
-        opacity: 0.8;
-    }
+body {
+    margin: 0;
+    font-family: Segoe UI, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+}
 
-    /* Flyout menu */
-    #menuButton {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        background: #111;
-        color: white;
-        border: none;
-        padding: 12px 16px;
-        cursor: pointer;
-        border-radius: 6px;
-        z-index: 1000;
-    }
+/* Header */
+header {
+    background: var(--header-bg);
+    color: var(--header-fg);
+    padding: 60px 40px;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: headerDrop 0.6s ease forwards;
+}
 
-    #flyout {
-        position: fixed;
-        top: 0;
-        left: -260px;
-        width: 260px;
-        height: 100%;
-        background: #222;
-        color: white;
-        padding: 20px;
-        transition: left 0.3s ease;
-    }
+header h1 {
+    font-size: 3rem;
+    margin: 0;
+    font-weight: 300;
+}
 
-    #flyout.open {
-        left: 0;
-    }
+header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
 
-    #flyout h2 {
-        margin-top: 0;
+/* Header animation */
+@keyframes headerDrop {
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
+}
 
-    #flyout a {
-        display: block;
-        color: #9cf;
-        margin: 10px 0;
-        text-decoration: none;
-    }
+/* Flyout menu */
+#menuButton {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 1000;
+    font-size: 0.95rem;
+}
 
-    /* Sections */
-    section {
-        padding: 40px;
-        max-width: 900px;
-        margin: auto;
-    }
+#flyout {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background: var(--flyout-bg);
+    color: var(--flyout-fg);
+    padding: 20px;
+    transition: left 0.35s cubic-bezier(.25,.8,.25,1);
+    z-index: 900;
+}
 
-    .skills-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 20px;
-    }
+#flyout.open {
+    left: 0;
+}
 
-    .skill {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        text-align: center;
-        font-weight: bold;
+#flyout h2 {
+    margin-top: 0;
+    font-weight: 300;
+}
+
+#flyout a {
+    display: block;
+    color: #9cf;
+    margin: 10px 0;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+/* Theme toggle */
+#themeToggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* Repo Tabs */
+#tabs {
+    display: flex;
+    overflow-x: auto;
+    background: var(--tab-bg);
+    border-bottom: 2px solid #ccc;
+}
+
+.tab {
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    border-right: 1px solid var(--tab-border);
+    font-weight: 500;
+    background: var(--tab-bg);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.25s ease, color 0.25s ease;
+    flex-shrink: 0;
+}
+
+.tab:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.tab.active {
+    background: var(--accent);
+    color: white;
+}
+
+/* Repo icon in tab */
+.repo-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+/* Content area */
+#content {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: auto;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+#content.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#content h2 {
+    margin-top: 0;
+}
+
+/* Metro tiles for languages */
+.tile-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    margin-top: 20px;
+}
+
+@media (min-width: 900px) {
+    .tile-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     }
+}
+
+@media (min-width: 1300px) {
+    .tile-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+}
+
+.tile {
+    background: var(--tile-bg);
+    color: var(--tile-fg);
+    padding: 20px;
+    border-radius: 6px;
+    font-size: 1.05rem;
+    text-align: center;
+    font-weight: 500;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: scale(0.9);
+    animation: tilePop 0.35s ease forwards;
+}
+
+/* Tile animation */
+@keyframes tilePop {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Stagger tiles */
+.tile:nth-child(1) { animation-delay: 0.05s; }
+.tile:nth-child(2) { animation-delay: 0.10s; }
+.tile:nth-child(3) { animation-delay: 0.15s; }
+.tile:nth-child(4) { animation-delay: 0.20s; }
+.tile:nth-child(5) { animation-delay: 0.25s; }
+.tile:nth-child(6) { animation-delay: 0.30s; }
+.tile:nth-child(7) { animation-delay: 0.35s; }
+.tile:nth-child(8) { animation-delay: 0.40s; }
+
+/* Basic link styling in content */
+a {
+    color: var(--accent);
+}
 </style>
 </head>
 
 <body>
 
 <button id="menuButton">☰ Tools</button>
+<button id="themeToggle">🌙</button>
 
 <div id="flyout">
     <h2>Tools</h2>
@@ -109,19 +268,12 @@
     <p>Developer • Systems tinkerer • Automation enthusiast</p>
 </header>
 
-<section>
-    <h2>Languages & Technologies</h2>
-    <p>Automatically pulled from GitHub repositories.</p>
-    <div id="skills" class="skills-grid"></div>
-</section>
+<div id="tabs"></div>
 
-<section>
-    <h2>About Me</h2>
-    <p>
-        I build tools, automation, and systems-level utilities.  
-        This page showcases my GitHub languages and personal tools.
-    </p>
-</section>
+<div id="content">
+    <h2>Welcome</h2>
+    <p>Select a repository from the tabs above to see its languages and details.</p>
+</div>
 
 <script>
 // Flyout menu
@@ -129,28 +281,64 @@ document.getElementById("menuButton").onclick = () => {
     document.getElementById("flyout").classList.toggle("open");
 };
 
-// Fetch GitHub languages
-async function loadLanguages() {
+// Theme toggle
+const toggle = document.getElementById("themeToggle");
+(function initTheme() {
+    const saved = localStorage.getItem("theme");
+    const initial = saved || "light";
+    document.documentElement.setAttribute("data-theme", initial);
+    toggle.textContent = initial === "dark" ? "☀️" : "🌙";
+})();
+
+toggle.onclick = () => {
+    const current = document.documentElement.getAttribute("data-theme") || "light";
+    const next = current === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    toggle.textContent = next === "dark" ? "☀️" : "🌙";
+    localStorage.setItem("theme", next);
+};
+
+// Fetch repos + languages
+async function loadRepos() {
     const res = await fetch("https://api.github.com/users/igaret/repos");
     const repos = await res.json();
 
-    const langSet = new Set();
+    const tabsDiv = document.getElementById("tabs");
+    const contentDiv = document.getElementById("content");
 
-    for (const repo of repos) {
-        if (repo.language) langSet.add(repo.language);
+    if (!Array.isArray(repos)) {
+        contentDiv.innerHTML = "<h2>Error</h2><p>Could not load repositories.</p>";
+        contentDiv.classList.add("visible");
+        return;
     }
 
-    const skillsDiv = document.getElementById("skills");
-    langSet.forEach(lang => {
-        const div = document.createElement("div");
-        div.className = "skill";
-        div.textContent = lang;
-        skillsDiv.appendChild(div);
-    });
-}
+    repos.sort((a, b) => a.name.localeCompare(b.name));
 
-loadLanguages();
-</script>
+    repos.forEach((repo, index) => {
+        const tab = document.createElement("div");
+        tab.className = "tab";
 
-</body>
-</html>
+        const iconUrl = `https://github.com/igaret/${repo.name}/raw/master/.github/icon.png`;
+        const fallbackIcon = repo.owner && repo.owner.avatar_url ? repo.owner.avatar_url : "https://github.com/igaret.png";
+
+        const img = document.createElement("img");
+        img.src = iconUrl;
+        img.onerror = () => { img.src = fallbackIcon; };
+        img.className = "repo-icon";
+
+        tab.appendChild(img);
+        tab.appendChild(document.createTextNode(repo.name));
+
+        tab.onclick = async () => {
+            document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+
+            const langRes = await fetch(repo.languages_url);
+            const langs = await langRes.json();
+
+            contentDiv.classList.remove("visible");
+
+            const languages = Object.keys(langs);
+            const languagesHtml = languages.length
+                ? languages.map(l => `<div class="tile">${l}</div>`).join("")
+                : `<p>No languages
