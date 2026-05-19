@@ -1,58 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>DNS-over-HTTPS Query</title>
-  <style>
-    body { font-family: sans-serif; padding: 2em; }
-    .output { margin-top: 1em; padding: 1em; background: #f0f0f0; border-radius: 5px; }
-    code { background: #e0e0e0; padding: 2px 4px; border-radius: 3px; }
-  </style>
-</head>
-<body>
-  <h1>DNS-over-HTTPS Query</h1>
-  <p>This page parses the URL fragment and performs a DNS query using Google's DoH API.</p>
-  <div class="output" id="output">Waiting for fragment...</div>
-
-  <script>
-    async function parseAndQueryDNS() {
-      const fragment = window.location.hash.substring(1);
-      const params = new URLSearchParams(fragment);
-      const output = document.getElementById('output');
-
-      if (!params.has('dns-query')) {
-        output.textContent = 'No dns-query modifier found.';
-        return;
-      }
-
-      const domain = params.get('domain');
-      const type = params.get('type') || 'A';
-      const mimetype = params.get('mimetype') || 'json';
-
-      if (!domain) {
-        output.textContent = 'Missing domain parameter.';
-        return;
-      }
-
-      const url = `https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=${encodeURIComponent(type)}`;
-
-      try {
-        const res = await fetch(url, {
-          headers: { 'Accept': mimetype === 'json' ? 'application/dns-json' : 'application/dns-message' }
-        });
-
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        const data = mimetype === 'json' ? await res.json() : await res.arrayBuffer();
-
-        output.innerHTML = `<strong>Query Result:</strong><pre>${mimetype === 'json' ? JSON.stringify(data, null, 2) : '[Binary response received]'}</pre>`;
-      } catch (err) {
-        output.textContent = `Error: ${err.message}`;
-      }
+<meta charset="UTF-8">
+<title>igaret — Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: #f5f5f5;
+        color: #222;
     }
 
-    window.addEventListener('load', parseAndQueryDNS);
-    window.addEventListener('hashchange', parseAndQueryDNS);
-  </script>
+    header {
+        background: #111;
+        color: white;
+        padding: 80px 40px;
+        text-align: center;
+    }
+
+    header h1 {
+        font-size: 3rem;
+        margin: 0;
+    }
+
+    header p {
+        font-size: 1.2rem;
+        opacity: 0.8;
+    }
+
+    /* Flyout menu */
+    #menuButton {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background: #111;
+        color: white;
+        border: none;
+        padding: 12px 16px;
+        cursor: pointer;
+        border-radius: 6px;
+        z-index: 1000;
+    }
+
+    #flyout {
+        position: fixed;
+        top: 0;
+        left: -260px;
+        width: 260px;
+        height: 100%;
+        background: #222;
+        color: white;
+        padding: 20px;
+        transition: left 0.3s ease;
+    }
+
+    #flyout.open {
+        left: 0;
+    }
+
+    #flyout h2 {
+        margin-top: 0;
+    }
+
+    #flyout a {
+        display: block;
+        color: #9cf;
+        margin: 10px 0;
+        text-decoration: none;
+    }
+
+    /* Sections */
+    section {
+        padding: 40px;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 20px;
+    }
+
+    .skill {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        text-align: center;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<button id="menuButton">☰ Tools</button>
+
+<div id="flyout">
+    <h2>Tools</h2>
+    <a href="/sshd-config-generator">SSHD Config Generator</a>
+    <a href="#">More coming soon…</a>
+</div>
+
+<header>
+    <h1>igaret</h1>
+    <p>Developer • Systems tinkerer • Automation enthusiast</p>
+</header>
+
+<section>
+    <h2>Languages & Technologies</h2>
+    <p>Automatically pulled from GitHub repositories.</p>
+    <div id="skills" class="skills-grid"></div>
+</section>
+
+<section>
+    <h2>About Me</h2>
+    <p>
+        I build tools, automation, and systems-level utilities.  
+        This page showcases my GitHub languages and personal tools.
+    </p>
+</section>
+
+<script>
+// Flyout menu
+document.getElementById("menuButton").onclick = () => {
+    document.getElementById("flyout").classList.toggle("open");
+};
+
+// Fetch GitHub languages
+async function loadLanguages() {
+    const res = await fetch("https://api.github.com/users/igaret/repos");
+    const repos = await res.json();
+
+    const langSet = new Set();
+
+    for (const repo of repos) {
+        if (repo.language) langSet.add(repo.language);
+    }
+
+    const skillsDiv = document.getElementById("skills");
+    langSet.forEach(lang => {
+        const div = document.createElement("div");
+        div.className = "skill";
+        div.textContent = lang;
+        skillsDiv.appendChild(div);
+    });
+}
+
+loadLanguages();
+</script>
+
 </body>
 </html>
